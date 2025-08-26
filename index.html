@@ -1,67 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Beer Bot 🍺</title>
+  <meta charset="UTF-8" />
+  <title>Bitter Buddy 🍺</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    h1 { color: #333; }
-    #chat { max-width: 600px; margin: auto; }
-    #messages { border: 1px solid #ccc; background: #fff; padding: 10px; height: 300px; overflow-y: auto; }
-    .user { font-weight: bold; color: #0077cc; }
-    .bot { font-weight: bold; color: #cc3300; }
-    #input { margin-top: 10px; display: flex; }
-    #input input { flex: 1; padding: 10px; font-size: 16px; }
-    #input button { padding: 10px; font-size: 16px; }
+    :root { --maxw: 720px; }
+    body { font-family: system-ui, Arial, sans-serif; background:#f6f6f6; margin:0; }
+    .wrap { max-width: var(--maxw); margin: 24px auto; background:#fff; padding:16px; border:1px solid #ddd; border-radius:10px; }
+    h1 { margin: 0 0 12px; font-size: 22px; }
+    #auth { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+    #auth input { padding:8px; }
+    #auth button { padding:8px 12px; }
+    #whoami { font-size: 14px; color:#555; }
+    #messages {
+      height: 360px; overflow-y: auto; border:1px solid #ddd; border-radius:8px;
+      padding:10px; background:#fafafa; margin-bottom:12px;
+      white-space: pre-wrap; /* preserve newlines */
+    }
+    .row { margin-bottom:8px; }
+    .user { color:#0b72d0; font-weight:600; }
+    .bot { color:#b84721; font-weight:600; }
+    form#chatForm { display:flex; gap:8px; }
+    #message { flex:1; padding:10px; font-size:16px; }
+    button[type=submit] { padding:10px 14px; font-size:16px; }
+    .small { font-size:12px; color:#777; }
   </style>
 </head>
 <body>
-  <div id="chat">
-    <h1>Beer Bot 🍺</h1>
-    <div id="input">
-      <form id="chatForm" onsubmit="sendMessage(); return false;">
-        <input type="text" id="message" placeholder="Ask Beer Bot..." autocomplete="off" />
-        <button type="submit">Send</button>
-      </form>
+  <div class="wrap">
+    <h1>Bitter Buddy 🍺</h1>
+
+    <!-- Login/Register -->
+    <div id="auth">
+      <input type="email" id="email" placeholder="Email" autocomplete="email" />
+      <input type="password" id="pw" placeholder="Password" autocomplete="current-password" />
+      <button type="button" onclick="register()">Register</button>
+      <button type="button" onclick="login()">Login</button>
+      <button type="button" onclick="logout()">Logout</button>
+      <span id="whoami" class="small"></span>
     </div>
+
+    <!-- Response window -->
+    <div id="messages"></div>
+
+    <!-- Chat input (Enter submits) -->
+    <form id="chatForm">
+      <input type="text" id="message" placeholder="Ask Bitter Buddy…" autocomplete="off" />
+      <button type="submit">Send</button>
+    </form>
+
+    <div class="small">Tip: Press <b>Enter</b> to send, <b>Shift+Enter</b> for a new line.</div>
   </div>
 
   <script>
-    const API_URL = "/chat"; // if you change port, update this
+    // Same-origin API paths on Render or local
+    const API_URL = "/chat";
+    const LOGIN_URL = "/auth/login";
+    const REGISTER_URL = "/auth/register";
+    const LOGOUT_URL = "/auth/logout";
+    const ME_URL = "/me";
+
+    // ---- Auth helpers ----
+    async function register() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('pw').value;
+      try {
+        const res = await fetch(REGISTER_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        document.getElementById('whoami').textContent = data?.user ? `Logged in as ${data.user.email}` : (data.error || 'Register failed');
+      } catch (e) {
+        document.getElementById('whoami').textContent = 'Register error: ' + e.message;
+      }
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('pw').value;
+      try {
+        const res = await fetch(LOGIN_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        document.getElementById('whoami').textContent = data?.user ? `Logged in as ${data.user.email}` : (data.error || 'Login failed');
+      } catch (e) {
+        document.getElementById('whoami').textContent = 'Login error: ' + e.message;
+      }
+    }
+
+    async function logout() {
+      try {
+        await fetch(LOGOUT_URL, { method:'POST', credentials:'include' });
+        document.getElementById('whoami').textContent = 'Logged out';
+      } catch (e) {
+        document.getElementById('whoami').textContent = 'Logout error: ' + e.message;
+      }
+    }
+
+    // Check session on load
+    (async function whoAmI() {
+      try {
+        const res = await fetch(ME_URL, { credentials:'include' });
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('whoami').textContent = data?.user ? `Logged in as ${data.user.email}` : '';
+        }
+      } catch {}
+    })();
+
+    // ---- Chat UI ----
+    const messagesEl = document.getElementById('messages');
+    function appendMessage(sender, text, cls) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<span class="${cls}">${sender}:</span> ${escapeHtml(text)}`;
+      messagesEl.appendChild(row);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // Submit on Enter, newline on Shift+Enter
+    const inputEl = document.getElementById('message');
+    document.getElementById('chatForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      sendMessage();
+    });
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.shiftKey) {
+        // allow newline
+        return;
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
 
     async function sendMessage() {
-      const input = document.getElementById("message");
-      const text = input.value.trim();
+      const text = inputEl.value.trim();
       if (!text) return;
-
-      appendMessage("You", text, "user");
-      input.value = "";
+      appendMessage('You', text, 'user');
+      inputEl.value = '';
+      inputEl.focus();
 
       try {
         const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // send auth cookie
           body: JSON.stringify({
             message: text,
-            snarkLevel: "Spicy", // you can change: Off | Mild | Medium | Spicy | Extra
+            snarkLevel: 'Spicy',   // tweak or wire to a dropdown later
             kidSafe: false,
             snobby: false
           })
         });
 
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          appendMessage('System', `HTTP ${res.status} ${res.statusText} — ${errText}`, 'bot');
+          return;
+        }
         const data = await res.json();
-        appendMessage("Beer Bot", data.reply || "(no reply)", "bot");
+        appendMessage('Bitter Buddy', data.reply || '(no reply)', 'bot');
       } catch (err) {
-        appendMessage("System", "Error: " + err.message, "bot");
+        appendMessage('System', 'Network error: ' + err.message, 'bot');
       }
-    }
-
-    function appendMessage(sender, text, cls) {
-      const messages = document.getElementById("messages");
-      const div = document.createElement("div");
-      div.innerHTML = `<span class="${cls}">${sender}:</span> ${text}`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
     }
   </script>
 </body>
