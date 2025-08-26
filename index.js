@@ -6,6 +6,8 @@ import OpenAI from 'openai'
 import Database from 'better-sqlite3'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import bcrypt from 'bcryptjs'
+import cookieParser from 'cookie-parser'
 
 // --- setup paths ---
 const __filename = fileURLToPath(import.meta.url)
@@ -20,11 +22,18 @@ app.use(express.json())
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 // --- sqlite (file: beerbot.db) ---
-const db = new Database(path.join(__dirname, 'beerbot.db'))
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'beerbot.db')
+const db = new Database(DB_PATH)
 db.pragma('journal_mode = WAL')
 
 // create tables if not exist
 db.exec(`
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
   snark_level TEXT DEFAULT 'Mild',
@@ -42,6 +51,8 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 `)
 
+try { db.exec(`ALTER TABLE messages ADD COLUMN user_id TEXT`); } catch {}
+
 // --- small helpers ---
 const SNARK_LEVELS = ['Off', 'Mild', 'Medium', 'Spicy', 'Extra']
 function normalizeSnark(input = 'Mild') {
@@ -52,6 +63,64 @@ function normalizeSnark(input = 'Mild') {
   if (v.startsWith('spic') || v === '3') return 'Spicy'
   return 'Extra'
 }
+
+function requireAuth(req, res, next) {
+  const uid = req.signedCookies?.uid
+  if (!uid) return res.status(401).json({ error: 'unauthenticated' })
+  const user = getUserById.get(uid)
+  if (!user) return res.status(401).json({ error: 'invalid_user' })
+  req.user = user
+  next()
+}
+// Register: { email, password }
+app.post('/auth/register', (req, res) => {
+  const { email, password } = req.body ?? {}
+  if (!email || !password) return res.status(400).json({ error: 'email_password_required' })
+  const exists = getUserByEmail.get(email)
+  if (exists) return res.status(409).json({ error: 'email_in_use' })
+
+  const id = rid()
+  const password_hash = bcrypt.hashSync(String(password), 12)
+  insertUser.run({ id, email: String(email).toLowerCase(), password_hash })
+
+  // set signed cookie
+  res.cookie('uid', id, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: true,          // true in production (https). For local http testing you can set false.
+    signed: true,
+    maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
+  })
+  res.json({ ok: true, user: { id, email } })
+})
+
+// Login: { email, password }
+app.post('/auth/login', (req, res) => {
+  const { email, password } = req.body ?? {}
+  const user = getUserByEmail.get(String(email).toLowerCase())
+  if (!user) return res.status(401).json({ error: 'invalid_credentials' })
+  const ok = bcrypt.compareSync(String(password), user.password_hash)
+  if (!ok) return res.status(401).json({ error: 'invalid_credentials' })
+
+  res.cookie('uid', user.id, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: true,
+    signed: true,
+    maxAge: 1000 * 60 * 60 * 24 * 30
+  })
+  res.json({ ok: true, user: { id: user.id, email: user.email } })
+})
+
+app.post('/auth/logout', (req, res) => {
+  res.clearCookie('uid')
+  res.json({ ok: true })
+})
+
+app.get('/me', requireAuth, (req, res) => {
+  res.json({ user: { id: req.user.id, email: req.user.email } })
+})
+
 
 function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false) {
   const tone =
@@ -103,109 +172,68 @@ ON CONFLICT(id) DO UPDATE SET
 
 const getSession = db.prepare(`SELECT * FROM sessions WHERE id = ?`)
 
-const insertMsg = db.prepare(`
-INSERT INTO messages (session_id, role, content) VALUES (?, ?, ?)
-`)
+const insertMsg = db.prepare(`INSERT INTO messages (user_id, role, content) VALUES (?, ?, ?)`)
 
-const getRecentMessages = db.prepare(`
+const getRecentUserMessages = db.prepare(`
 SELECT role, content
 FROM messages
-WHERE session_id = ?
+WHERE user_id = ?
 ORDER BY id DESC
 LIMIT ?
 `)
 
-const deleteSessionMsgs = db.prepare(`DELETE FROM messages WHERE session_id = ?`)
-const deleteSession = db.prepare(`DELETE FROM sessions WHERE id = ?`)
+const MAX_TURNS = 10 // last 10 user+assistant turns
 
-// keep only last N user+assistant turns (system is rebuilt each time)
-const MAX_TURNS = 10  // tweak as you like (each "turn" ~ user+assistant)
-
-// --- routes ---
-// chat with memory
-app.post('/chat', async (req, res) => {
+app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const {
-      message,
-      sessionId = 'default',    // pass a unique id per browser/user in production
-      snarkLevel,               // optional override
-      kidSafe,                  // optional override
-      snobby                    // optional override
-    } = req.body ?? {}
-
+    const { message, snarkLevel, kidSafe, snobby } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
-    // load or create session
-    const existing = getSession.get(sessionId)
-    const snark = normalizeSnark(snarkLevel ?? existing?.snark_level ?? 'Mild')
-    const ksafe = (kidSafe ?? existing?.kid_safe ?? 0) ? 1 : 0
-    const snob  = (snobby ?? existing?.snobby ?? 0) ? 1 : 0
+    // load preferences per user if you want—omitted here; feel free to store per-user settings in a new table.
+    const snark = normalizeSnark(snarkLevel ?? 'Mild')
+    const ksafe = !!kidSafe
+    const snob  = !!snobby
 
-    upsertSession.run({
-      id: sessionId,
-      snark_level: snark,
-      kid_safe: ksafe,
-      snobby: snob
-    })
-
-    // load recent messages (last N turns * 2 roles)
+    // recent history for this user
     const need = MAX_TURNS * 2
-    const recent = getRecentMessages.all(sessionId, need).reverse() // chronological
+    const recent = getRecentUserMessages.all(req.user.id, need).reverse()
 
-    // Build full input: fresh system + recent history + new user msg
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(snark, !!ksafe, !!snob) },
+      { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, snob) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
 
-    // save user message
-    insertMsg.run(sessionId, 'user', String(message))
+    insertMsg.run(req.user.id, 'user', String(message))
 
-    // call model
     const response = await client.responses.create({
       model: 'gpt-4.1-mini',
       input
     })
-
     const text = response.output_text ?? '(no reply)'
-    // save assistant message
-    insertMsg.run(sessionId, 'assistant', text)
 
-    res.json({
-      reply: text,
-      meta: { sessionId, snarkLevel: snark, kidSafe: !!ksafe, snobby: !!snob, turnsKept: MAX_TURNS }
-    })
+    insertMsg.run(req.user.id, 'assistant', text)
+
+    res.json({ reply: text })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
 
-// view history (debug)
-app.get('/history/:sessionId', (req, res) => {
-  const s = req.params.sessionId || 'default'
+// optional helpers
+app.get('/history', requireAuth, (req, res) => {
   const rows = db.prepare(
-    `SELECT role, content, created_at FROM messages WHERE session_id = ? ORDER BY id ASC`
-  ).all(s)
-  res.json({ sessionId: s, messages: rows })
+    `SELECT role, content, created_at FROM messages WHERE user_id = ? ORDER BY id ASC`
+  ).all(req.user.id)
+  res.json({ userId: req.user.id, messages: rows })
 })
 
-// reset a session (clears memory)
-app.post('/reset/:sessionId', (req, res) => {
-  const s = req.params.sessionId || 'default'
-  deleteSessionMsgs.run(s)
-  deleteSession.run(s)
-  res.json({ ok: true, sessionId: s })
+app.post('/reset', requireAuth, (req, res) => {
+  db.prepare(`DELETE FROM messages WHERE user_id = ?`).run(req.user.id)
+  res.json({ ok: true })
 })
 
-// health
-app.get('/health', (_, res) => res.json({ ok: true }))
-
-// (optional) serve a simple homepage if you made index.html
-app.get('/', (_, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
-})
 
 const port = process.env.PORT || 8787
 app.listen(port, () => console.log(`beerbot-edge listening on http://localhost:${port}`))
