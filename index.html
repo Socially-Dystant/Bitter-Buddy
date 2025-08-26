@@ -18,10 +18,11 @@
 <body>
   <div id="chat">
     <h1>Beer Bot 🍺</h1>
-    <div id="messages"></div>
     <div id="input">
-      <input type="text" id="message" placeholder="Ask Beer Bot..." />
-      <button onclick="sendMessage()">Send</button>
+      <form id="chatForm" onsubmit="sendMessage(); return false;">
+        <input type="text" id="message" placeholder="Ask Beer Bot..." autocomplete="off" />
+        <button type="submit">Send</button>
+      </form>
     </div>
   </div>
 
