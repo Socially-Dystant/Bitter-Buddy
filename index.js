@@ -16,15 +16,18 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const taplistPath = path.join(__dirname,'data', 'taplist.json')
 let taplist = []
-try {
-  if (fs.existsSync(taplistPath)) {
-    const jsonData = fs.readFileSync(taplistPath, 'utf-8')
-    taplist = JSON.parse(jsonData)
-    console.log(`Loaded ${taplist.length} beers from taplist.`)
+function loadTaplist() {
+  try {
+    const content = fs.readFileSync(TAPLIST_PATH, 'utf-8')
+    taplist = JSON.parse(content)
+    console.log(`✅ Loaded ${taplist.length} beers from taplist.json`)
+  } catch (err) {
+    console.warn('⚠️ Could not load taplist.json:', err.message)
+    taplist = []
   }
-} catch (err) {
-  console.warn('Failed to load taplist:', err)
 }
+
+loadTaplist()
 
 // --- express app ---
 const app = express()
