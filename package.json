@@ -2,15 +2,15 @@
   "name": "beerbot-edge",
   "version": "1.0.0",
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": { "node": "20.x" }, 
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "render-build": "npm rebuild better-sqlite3 --build-from-source"
+    "dev": "nodemon index.js"
+   
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "better-sqlite3": "^9.4.0",
+    "better-sqlite3": "^9.4.0",             
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
