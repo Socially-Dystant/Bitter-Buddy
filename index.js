@@ -18,14 +18,14 @@ const taplistPath = path.join(__dirname,'data', 'taplist.json')
 let taplist = []
 function loadTaplist() {
   try {
-    const content = fs.readFileSync(taplistPath, 'utf-8')
-    taplist = JSON.parse(content)
-    console.log(`✅ Loaded ${taplist.length} beers from taplist.json`)
+    const content = fs.readFileSync(path.join(__dirname, 'data', 'taplist.json'), 'utf-8')
+    return JSON.parse(content)
   } catch (err) {
     console.warn('⚠️ Could not load taplist.json:', err.message)
-    taplist = []
+    return []
   }
 }
+
 
 loadTaplist()
 
@@ -259,12 +259,14 @@ app.post('/chat', requireAuth, async (req, res) => {
     const need = MAX_TURNS * 2
     const recent = getRecentUserMessages.all(req.user.id, need).reverse()
 
+    const taplistNow = loadTaplist()
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, snob, taplist) },
+      { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, snob, taplistNow) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
-
+    console.log(`🧪 Loaded taplist with ${taplistNow.length} beers`)
+    
     // save user message (note the 4 args now: user_id, session_id, role, content)
     insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
 
