@@ -192,7 +192,7 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // --- system prompt ---
-function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist = []) {
+function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist) {
   const tone =
     snark === 'Off' ? 'Be friendly, clear, and professional.'
     : snark === 'Mild' ? 'Light sarcasm, playful tone.'
