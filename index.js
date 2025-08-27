@@ -17,6 +17,10 @@ const __dirname = path.dirname(__filename)
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use((req, _res, next) => { console.log(`${req.method} ${req.url}`); next(); });
+
+process.on('unhandledRejection', (e) => console.error('unhandledRejection', e));
+process.on('uncaughtException', (e) => console.error('uncaughtException', e));
 app.get('/', (_, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -77,24 +81,26 @@ function requireAuth(req, res, next) {
 }
 // Register: { email, password }
 app.post('/auth/register', (req, res) => {
-  const { email, password } = req.body ?? {}
-  if (!email || !password) return res.status(400).json({ error: 'email_password_required' })
-  const exists = getUserByEmail.get(email)
-  if (exists) return res.status(409).json({ error: 'email_in_use' })
+  try {
+    const { email, password } = req.body ?? {};
+    if (!email || !password) return res.status(400).json({ error: 'email_password_required' });
 
-  const id = rid()
-  const password_hash = bcrypt.hashSync(String(password), 12)
-  insertUser.run({ id, email: String(email).toLowerCase(), password_hash })
+    const exists = getUserByEmail.get(String(email).toLowerCase());
+    if (exists) return res.status(409).json({ error: 'email_in_use' });
 
-  // set signed cookie
-  res.cookie('uid', id, {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,          // true in production (https). For local http testing you can set false.
-    signed: true,
-    maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
-  })
-  res.json({ ok: true, user: { id, email } })
+    const id = rid();
+    const password_hash = bcrypt.hashSync(String(password), 12);
+    insertUser.run({ id, email: String(email).toLowerCase(), password_hash });
+
+    res.cookie('uid', id, {
+      httpOnly: true, sameSite: 'lax', secure: true,
+      signed: !!process.env.AUTH_SECRET, maxAge: 1000*60*60*24*30
+    });
+    res.json({ ok: true, user: { id, email: String(email).toLowerCase() } });
+  } catch (err) {
+    console.error('register error:', err);
+    res.status(500).json({ error: 'register_failed', detail: String(err.message || err) });
+  }
 })
 
 // Login: { email, password }
