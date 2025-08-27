@@ -14,6 +14,17 @@ import cookieParser from 'cookie-parser'
 // --- setup paths ---
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+const taplistPath = path.join(__dirname,'data', 'taplist.json')
+let taplist = []
+try {
+  if (fs.existsSync(taplistPath)) {
+    const jsonData = fs.readFileSync(taplistPath, 'utf-8')
+    taplist = JSON.parse(jsonData)
+    console.log(`Loaded ${taplist.length} beers from taplist.`)
+  }
+} catch (err) {
+  console.warn('Failed to load taplist:', err)
+}
 
 // --- express app ---
 const app = express()
@@ -178,7 +189,7 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // --- system prompt ---
-function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false) {
+function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist = []) {
   const tone =
     snark === 'Off' ? 'Be friendly, clear, and professional.'
     : snark === 'Mild' ? 'Light sarcasm, playful tone.'
@@ -194,11 +205,19 @@ function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false) {
     ? 'Adopt a “snobby cicerone” vibe—confident, slightly superior, but helpful.'
     : 'Adopt a “rude-but-fun bartender” vibe—blunt, witty, but helpful.'
 
+  let beerNames = Array.isArray(taplist) ? taplist.map(b => b.name).join(', ') : ''
+  if (beerNames.length > 1000) beerNames = beerNames.slice(0, 1000) + '...'
+
+  const taplistNotice = beerNames
+    ? `Here are the beers currently on tap: ${beerNames}`
+    : `No taplist is available currently.`
+
   return `
 You are Beer Bot, a witty beer expert. Style: ${snobby ? 'Snobby' : 'Rude-Fun'}, SnarkLevel=${snark}, KidSafe=${kidSafe}.
 ${flavor}
 ${tone}
 ${profanity}
+${taplistNotice}
 
 Core behavior:
 - Give accurate, concise beer guidance (ABV/IBU ranges, flavor notes, style relatives).
@@ -213,7 +232,7 @@ Core behavior:
 }
 
 // --- chat route (per-user history; requires login) ---
-const MAX_TURNS = 10 // last 10 user+assistant turns
+const MAX_TURNS = 100 // last 100 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
