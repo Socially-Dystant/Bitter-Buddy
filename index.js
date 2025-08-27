@@ -102,7 +102,9 @@ ON CONFLICT(id) DO UPDATE SET
 const getSession = db.prepare(`SELECT * FROM sessions WHERE id = ?`)
 
 // messages (per-user)
-const insertMsgUser = db.prepare(`INSERT INTO messages (user_id, role, content) VALUES (?, ?, ?)`)
+const insertMsgUser = db.prepare(`
+  INSERT INTO messages (user_id, session_id, role, content) VALUES (?, ?, ?, ?)`)
+
 const getRecentUserMessages = db.prepare(`
   SELECT role, content FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT ?
 `)
@@ -233,7 +235,7 @@ app.post('/chat', requireAuth, async (req, res) => {
     ]
 
     // save user message
-    insertMsgUser.run(req.user.id, 'user', String(message))
+    insertMsgUser.run(req.user.id, req.user.id, 'user', String(message))
 
     // call model
     const response = await client.responses.create({
@@ -243,7 +245,7 @@ app.post('/chat', requireAuth, async (req, res) => {
     const text = response.output_text ?? '(no reply)'
 
     // save assistant message
-    insertMsgUser.run(req.user.id, 'assistant', text)
+    insertMsgUser.run(req.user.id, req.user.id, 'assistant', text)
 
     res.json({ reply: text })
   } catch (err) {
