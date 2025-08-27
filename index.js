@@ -224,7 +224,16 @@ app.post('/chat', requireAuth, async (req, res) => {
     const ksafe = !!kidSafe
     const snob  = !!snobby
 
-    // recent history for this user
+    // make sure a sessions row exists to satisfy FK (use user.id as session_id)
+    const sessionId = req.user.id
+    upsertSession.run({
+      id: sessionId,
+      snark_level: snark,
+      kid_safe: ksafe ? 1 : 0,
+      snobby: snob ? 1 : 0
+    })
+
+    // recent history (unchanged)
     const need = MAX_TURNS * 2
     const recent = getRecentUserMessages.all(req.user.id, need).reverse()
 
@@ -234,18 +243,14 @@ app.post('/chat', requireAuth, async (req, res) => {
       { role: 'user', content: String(message) }
     ]
 
-    // save user message
-    insertMsgUser.run(req.user.id, req.user.id, 'user', String(message))
+    // save user message (note the 4 args now: user_id, session_id, role, content)
+    insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
 
-    // call model
-    const response = await client.responses.create({
-      model: 'gpt-4.1-mini',
-      input
-    })
+    const response = await client.responses.create({ model: 'gpt-4.1-mini', input })
     const text = response.output_text ?? '(no reply)'
 
     // save assistant message
-    insertMsgUser.run(req.user.id, req.user.id, 'assistant', text)
+    insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
 
     res.json({ reply: text })
   } catch (err) {
@@ -253,6 +258,7 @@ app.post('/chat', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
+
 
 // --- history & reset (per user) ---
 app.get('/history', requireAuth, (req, res) => {
