@@ -107,14 +107,20 @@
       }
     }
 
-    async function logout() {
-      try {
-        await fetch(LOGOUT_URL, { method:'POST', credentials:'include' });
-        document.getElementById('whoami').textContent = 'Logged out';
-      } catch (e) {
-        document.getElementById('whoami').textContent = 'Logout error: ' + e.message;
-      }
+     async function logout() {
+    try {
+      await fetch(LOGOUT_URL, { method: 'POST', credentials: 'include' });
+
+      // Clear stored credentials in the form
+      document.getElementById('email').value = '';
+      document.getElementById('pw').value = '';
+
+      // Update UI
+      document.getElementById('whoami').textContent = 'Logged out';
+    } catch (e) {
+      document.getElementById('whoami').textContent = 'Logout error: ' + e.message;
     }
+  }
 
     // Check session on load
     (async function whoAmI() {
