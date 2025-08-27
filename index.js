@@ -192,7 +192,7 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // --- system prompt ---
-function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist) {
+function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist = []) {
   const tone =
     snark === 'Off' ? 'Be friendly, clear, and professional.'
     : snark === 'Mild' ? 'Light sarcasm, playful tone.'
@@ -260,7 +260,7 @@ app.post('/chat', requireAuth, async (req, res) => {
     const recent = getRecentUserMessages.all(req.user.id, need).reverse()
 
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, snob) },
+      { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, snob, taplist) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
