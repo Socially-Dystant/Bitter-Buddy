@@ -17,6 +17,9 @@ const __dirname = path.dirname(__filename)
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.get('/', (_, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // --- openai client ---
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
