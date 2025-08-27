@@ -6,6 +6,8 @@ import OpenAI from 'openai'
 import Database from 'better-sqlite3'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import fs from 'fs'
+import crypto from 'crypto'
 import bcrypt from 'bcryptjs'
 import cookieParser from 'cookie-parser'
 
@@ -15,21 +17,28 @@ const __dirname = path.dirname(__filename)
 
 // --- express app ---
 const app = express()
-app.use(cors())
+// If frontend is same-origin, this is fine. If hosted elsewhere, set an allowlist.
+app.use(cors({ origin: true, credentials: true }))
 app.use(express.json())
-app.use((req, _res, next) => { console.log(`${req.method} ${req.url}`); next(); });
+app.use(cookieParser(process.env.AUTH_SECRET))
 
-process.on('unhandledRejection', (e) => console.error('unhandledRejection', e));
-process.on('uncaughtException', (e) => console.error('uncaughtException', e));
-app.get('/', (_, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+// basic logging & crash visibility
+app.use((req, _res, next) => { console.log(`${req.method} ${req.url}`); next() })
+process.on('unhandledRejection', (e) => console.error('unhandledRejection', e))
+process.on('uncaughtException', (e) => console.error('uncaughtException', e))
+
+// serve index.html at /
+app.get('/', (_req, res) => { res.sendFile(path.join(__dirname, 'index.html')) })
+
+// health
+app.get('/health', (_req, res) => res.json({ ok: true }))
 
 // --- openai client ---
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-// --- sqlite (file: beerbot.db) ---
+// --- sqlite (file path via DB_PATH; create dir if needed) ---
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'beerbot.db')
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true })
 const db = new Database(DB_PATH)
 db.pragma('journal_mode = WAL')
 
@@ -50,14 +59,15 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  session_id TEXT NOT NULL,
-  role TEXT NOT NULL,           -- 'system' | 'user' | 'assistant'
+  user_id TEXT,                -- per-user history
+  session_id TEXT,             -- optional (legacy/session based)
+  role TEXT NOT NULL,          -- 'system' | 'user' | 'assistant'
   content TEXT NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(session_id) REFERENCES sessions(id) ON DELETE CASCADE
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `)
 
+// If your old table lacked user_id, this no-ops on fresh DB and adds it on existing.
 try { db.exec(`ALTER TABLE messages ADD COLUMN user_id TEXT`); } catch {}
 
 // --- small helpers ---
@@ -70,7 +80,34 @@ function normalizeSnark(input = 'Mild') {
   if (v.startsWith('spic') || v === '3') return 'Spicy'
   return 'Extra'
 }
+const rid = (n = 16) => crypto.randomBytes(n).toString('hex')
 
+// --- SQL prepared statements ---
+// users
+const insertUser = db.prepare(`
+  INSERT INTO users (id, email, password_hash) VALUES (@id, @email, @password_hash)
+`)
+const getUserByEmail = db.prepare(`SELECT * FROM users WHERE email = ?`)
+const getUserById    = db.prepare(`SELECT * FROM users WHERE id = ?`)
+
+// sessions (kept for possible future per-user prefs)
+const upsertSession = db.prepare(`
+INSERT INTO sessions (id, snark_level, kid_safe, snobby)
+VALUES (@id, @snark_level, @kid_safe, @snobby)
+ON CONFLICT(id) DO UPDATE SET
+  snark_level=excluded.snark_level,
+  kid_safe=excluded.kid_safe,
+  snobby=excluded.snobby
+`)
+const getSession = db.prepare(`SELECT * FROM sessions WHERE id = ?`)
+
+// messages (per-user)
+const insertMsgUser = db.prepare(`INSERT INTO messages (user_id, role, content) VALUES (?, ?, ?)`)
+const getRecentUserMessages = db.prepare(`
+  SELECT role, content FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT ?
+`)
+
+// --- auth middleware ---
 function requireAuth(req, res, next) {
   const uid = req.signedCookies?.uid
   if (!uid) return res.status(401).json({ error: 'unauthenticated' })
@@ -79,46 +116,54 @@ function requireAuth(req, res, next) {
   req.user = user
   next()
 }
-// Register: { email, password }
+
+// --- auth routes ---
 app.post('/auth/register', (req, res) => {
   try {
-    const { email, password } = req.body ?? {};
-    if (!email || !password) return res.status(400).json({ error: 'email_password_required' });
+    const { email, password } = req.body ?? {}
+    if (!email || !password) return res.status(400).json({ error: 'email_password_required' })
 
-    const exists = getUserByEmail.get(String(email).toLowerCase());
-    if (exists) return res.status(409).json({ error: 'email_in_use' });
+    const exists = getUserByEmail.get(String(email).toLowerCase())
+    if (exists) return res.status(409).json({ error: 'email_in_use' })
 
-    const id = rid();
-    const password_hash = bcrypt.hashSync(String(password), 12);
-    insertUser.run({ id, email: String(email).toLowerCase(), password_hash });
+    const id = rid()
+    const password_hash = bcrypt.hashSync(String(password), 12)
+    insertUser.run({ id, email: String(email).toLowerCase(), password_hash })
 
     res.cookie('uid', id, {
-      httpOnly: true, sameSite: 'lax', secure: true,
-      signed: !!process.env.AUTH_SECRET, maxAge: 1000*60*60*24*30
-    });
-    res.json({ ok: true, user: { id, email: String(email).toLowerCase() } });
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,                      // keep true on Render (https)
+      signed: !!process.env.AUTH_SECRET, // sign only if secret provided
+      maxAge: 1000 * 60 * 60 * 24 * 30   // 30 days
+    })
+    res.json({ ok: true, user: { id, email: String(email).toLowerCase() } })
   } catch (err) {
-    console.error('register error:', err);
-    res.status(500).json({ error: 'register_failed', detail: String(err.message || err) });
+    console.error('register error:', err)
+    res.status(500).json({ error: 'register_failed', detail: String(err.message || err) })
   }
 })
 
-// Login: { email, password }
 app.post('/auth/login', (req, res) => {
-  const { email, password } = req.body ?? {}
-  const user = getUserByEmail.get(String(email).toLowerCase())
-  if (!user) return res.status(401).json({ error: 'invalid_credentials' })
-  const ok = bcrypt.compareSync(String(password), user.password_hash)
-  if (!ok) return res.status(401).json({ error: 'invalid_credentials' })
+  try {
+    const { email, password } = req.body ?? {}
+    const user = getUserByEmail.get(String(email).toLowerCase())
+    if (!user) return res.status(401).json({ error: 'invalid_credentials' })
+    const ok = bcrypt.compareSync(String(password), user.password_hash)
+    if (!ok) return res.status(401).json({ error: 'invalid_credentials' })
 
-  res.cookie('uid', user.id, {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,
-    signed: true,
-    maxAge: 1000 * 60 * 60 * 24 * 30
-  })
-  res.json({ ok: true, user: { id: user.id, email: user.email } })
+    res.cookie('uid', user.id, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      signed: !!process.env.AUTH_SECRET,
+      maxAge: 1000 * 60 * 60 * 24 * 30
+    })
+    res.json({ ok: true, user: { id: user.id, email: user.email } })
+  } catch (err) {
+    console.error('login error:', err)
+    res.status(500).json({ error: 'login_failed', detail: String(err.message || err) })
+  }
 })
 
 app.post('/auth/logout', (req, res) => {
@@ -130,18 +175,14 @@ app.get('/me', requireAuth, (req, res) => {
   res.json({ user: { id: req.user.id, email: req.user.email } })
 })
 
-
+// --- system prompt ---
 function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false) {
   const tone =
-    snark === 'Off'
-      ? 'Be friendly, clear, and professional.'
-      : snark === 'Mild'
-      ? 'Light sarcasm, playful tone.'
-      : snark === 'Medium'
-      ? 'Noticeably snarky pub-banter; short playful roasts.'
-      : snark === 'Spicy'
-      ? 'Salty pub-banter; short punchlines; keep it good-natured.'
-      : 'High snark; still playful, never cruel; one-liners allowed.'
+    snark === 'Off' ? 'Be friendly, clear, and professional.'
+    : snark === 'Mild' ? 'Light sarcasm, playful tone.'
+    : snark === 'Medium' ? 'Noticeably snarky pub-banter; short playful roasts.'
+    : snark === 'Spicy' ? 'Salty pub-banter; short punchlines; keep it good-natured.'
+    : 'High snark; still playful, never cruel; one-liners allowed.'
 
   const profanity = kidSafe
     ? 'Absolutely no profanity. Use clean snark (“heck”, “dang”, “keg gremlins”).'
@@ -169,28 +210,7 @@ Core behavior:
 `
 }
 
-// --- DB statements ---
-const upsertSession = db.prepare(`
-INSERT INTO sessions (id, snark_level, kid_safe, snobby)
-VALUES (@id, @snark_level, @kid_safe, @snobby)
-ON CONFLICT(id) DO UPDATE SET
-  snark_level=excluded.snark_level,
-  kid_safe=excluded.kid_safe,
-  snobby=excluded.snobby
-`)
-
-const getSession = db.prepare(`SELECT * FROM sessions WHERE id = ?`)
-
-const insertMsg = db.prepare(`INSERT INTO messages (user_id, role, content) VALUES (?, ?, ?)`)
-
-const getRecentUserMessages = db.prepare(`
-SELECT role, content
-FROM messages
-WHERE user_id = ?
-ORDER BY id DESC
-LIMIT ?
-`)
-
+// --- chat route (per-user history; requires login) ---
 const MAX_TURNS = 10 // last 10 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
@@ -198,7 +218,6 @@ app.post('/chat', requireAuth, async (req, res) => {
     const { message, snarkLevel, kidSafe, snobby } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
-    // load preferences per user if you want—omitted here; feel free to store per-user settings in a new table.
     const snark = normalizeSnark(snarkLevel ?? 'Mild')
     const ksafe = !!kidSafe
     const snob  = !!snobby
@@ -213,15 +232,18 @@ app.post('/chat', requireAuth, async (req, res) => {
       { role: 'user', content: String(message) }
     ]
 
-    insertMsg.run(req.user.id, 'user', String(message))
+    // save user message
+    insertMsgUser.run(req.user.id, 'user', String(message))
 
+    // call model
     const response = await client.responses.create({
       model: 'gpt-4.1-mini',
       input
     })
     const text = response.output_text ?? '(no reply)'
 
-    insertMsg.run(req.user.id, 'assistant', text)
+    // save assistant message
+    insertMsgUser.run(req.user.id, 'assistant', text)
 
     res.json({ reply: text })
   } catch (err) {
@@ -230,7 +252,7 @@ app.post('/chat', requireAuth, async (req, res) => {
   }
 })
 
-// optional helpers
+// --- history & reset (per user) ---
 app.get('/history', requireAuth, (req, res) => {
   const rows = db.prepare(
     `SELECT role, content, created_at FROM messages WHERE user_id = ? ORDER BY id ASC`
@@ -243,6 +265,6 @@ app.post('/reset', requireAuth, (req, res) => {
   res.json({ ok: true })
 })
 
-
+// --- start server ---
 const port = process.env.PORT || 8787
 app.listen(port, () => console.log(`beerbot-edge listening on http://localhost:${port}`))
