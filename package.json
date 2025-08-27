@@ -1,26 +1,23 @@
 {
   "name": "beerbot-edge",
   "version": "1.0.0",
-  "description": "",
   "type": "module",
-  "main": "index.js",
+  "engines": { "node": ">=18" },
   "scripts": {
+    "start": "node index.js",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "render-build": "npm rebuild better-sqlite3 --build-from-source"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "better-sqlite3": "^12.2.0",
-    "cookie-parser": "^1.4.7",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "openai": "^5.16.0"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.54.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.0.2"
   }
 }
