@@ -239,7 +239,7 @@ const MAX_TURNS = 100 // last 100 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message, snarkLevel, kidSafe, snobby } = req.body ?? {}
+    const { message, snarkLevel, kidSafe, snobby, taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
     const snark = normalizeSnark(snarkLevel ?? 'Mild')
