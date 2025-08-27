@@ -18,7 +18,7 @@ const taplistPath = path.join(__dirname,'data', 'taplist.json')
 let taplist = []
 function loadTaplist() {
   try {
-    const content = fs.readFileSync(TAPLIST_PATH, 'utf-8')
+    const content = fs.readFileSync(taplistPath, 'utf-8')
     taplist = JSON.parse(content)
     console.log(`✅ Loaded ${taplist.length} beers from taplist.json`)
   } catch (err) {
