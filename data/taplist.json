@@ -1,77 +1,302 @@
 [
   {
+    "brewery": "Shred",
     "name": "Daily Grind - Coffee Porter 7% ABV",
-    "url": "https://shredbeercompany.com/menu/daily-grind-coffee-porter-7-abv/",
-    "description": "Cold conditioned on a hefty dose of Colombia/Dulima Excelso from our friends at Valiant Coffee Roasters. Served on nitro for maximum creamy goodness."
+    "description": "Cold conditioned on a hefty dose of Colombia/Dulima Excelso from our friends at Valiant Coffee Roasters. Served on nitro for maximum creamy goodness.",
+    "url": "https://shredbeercompany.com/menu/daily-grind-coffee-porter-7-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Cold Grind - American Lager 4.5% ABV",
-    "url": "https://shredbeercompany.com/menu/cold-grind-american-lager-4-5-abv/",
-    "description": "Clean. Crisp. Uncompromising.\r\n\r\nCold Grind is a no-nonsense premium lager brewed for those who respect the grind. Crafted with precision and patience, it pours a brilliant golden hue with a frothy white head. Expect a light, bready malt backbone balanced by a subtle hop bitterness and a refreshingly dry finish. Cold-fermented and conditioned for extra smoothness, it’s the perfect beer for unwinding after a hard day—or gearing up for the next challenge."
+    "description": "Clean. Crisp. Uncompromising.\r\n\r\nCold Grind is a no-nonsense premium lager brewed for those who respect the grind. Crafted with precision and patience, it pours a brilliant golden hue with a frothy white head. Expect a light, bready malt backbone balanced by a subtle hop bitterness and a refreshingly dry finish. Cold-fermented and conditioned for extra smoothness, it’s the perfect beer for unwinding after a hard day—or gearing up for the next challenge.",
+    "url": "https://shredbeercompany.com/menu/cold-grind-american-lager-4-5-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Velvet Funeral - Barrel-Aged Stout 16.1% ABV",
-    "url": "https://shredbeercompany.com/menu/velvet-funeral-barrel-aged-stout-16-1-abv/",
-    "description": "Aged gracefully for 18 months in a combination of Blanton's and Buffalo Trace barrels."
+    "description": "Aged gracefully for 18 months in a combination of Blanton's and Buffalo Trace barrels.",
+    "url": "https://shredbeercompany.com/menu/velvet-funeral-barrel-aged-stout-16-1-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Terpytronic - Fruited Sour 6% ABV",
-    "url": "https://shredbeercompany.com/menu/terpytronic-fruited-sour-5-5-abv/",
-    "description": "Tart. Tropical. Terpy as hell.\r\n\r\nTerpytronic -it’s juiced-up, turned-on, and terp-enhanced. Pineapple, guava, and mango throw down the tropical heat, while a layer of fruit-heavy terpenes adds a jolt to the aroma. The result? A sour ale that hits like a tropical storm and finishes with a punch of terp magic. One sip and you’re hooked into the flavor grid."
+    "description": "Tart. Tropical. Terpy as hell.\r\n\r\nTerpytronic -it’s juiced-up, turned-on, and terp-enhanced. Pineapple, guava, and mango throw down the tropical heat, while a layer of fruit-heavy terpenes adds a jolt to the aroma. The result? A sour ale that hits like a tropical storm and finishes with a punch of terp magic. One sip and you’re hooked into the flavor grid.",
+    "url": "https://shredbeercompany.com/menu/terpytronic-fruited-sour-5-5-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Skaze Or Die! - Hazy DIPA ABV 8.5%",
-    "url": "https://shredbeercompany.com/menu/skaze-or-die-hazy-dipa-abv-8-5/",
-    "description": "Collaboration with Alvarado Street Brewery.\r\n\r\nGet ready to drop in! Channel your inner shredder from this super sick combo of Galaxy, Citra, Krush, and Krush Cryo hops. An adrenaline rush of pineapple sorbet, guava purée, and peach gummies infiltrate your olfactory senses.\r\n\r\nThis beer is ready to launch, and it's ready to take you with it!"
+    "description": "Collaboration with Alvarado Street Brewery.\r\n\r\nGet ready to drop in! Channel your inner shredder from this super sick combo of Galaxy, Citra, Krush, and Krush Cryo hops. An adrenaline rush of pineapple sorbet, guava purée, and peach gummies infiltrate your olfactory senses.\r\n\r\nThis beer is ready to launch, and it's ready to take you with it!",
+    "url": "https://shredbeercompany.com/menu/skaze-or-die-hazy-dipa-abv-8-5/"
   },
   {
+    "brewery": "Shred",
     "name": "Micro Blaster - Session IPA 5% ABV",
-    "url": "https://shredbeercompany.com/menu/micro-blaster-session-ipa-5-abv/",
-    "description": "Blurring the lines of Session IPA and Pale Ale, this absolute hop crusher gets blasted with powerful charges of Nelson, Mosaic, and Simcoe. Punchy notes of blueberry forest, rock fruit, and southern hemi diesel.\r\n\r\n2025 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2024 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2023 GABF - Bronze Medal - Session India Pale Ale"
+    "description": "Blurring the lines of Session IPA and Pale Ale, this absolute hop crusher gets blasted with powerful charges of Nelson, Mosaic, and Simcoe. Punchy notes of blueberry forest, rock fruit, and southern hemi diesel.\r\n\r\n2025 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2024 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2023 GABF - Bronze Medal - Session India Pale Ale",
+    "url": "https://shredbeercompany.com/menu/micro-blaster-session-ipa-5-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Orange Bloom - DDH Hazy IPA 7% ABV",
-    "url": "https://shredbeercompany.com/menu/orange-bloom-ddh-hazy-ipa-7-abv/",
-    "description": "Citra and Amarillo hops blend in harmony over a bed of Golden Promise malt.\r\n\r\nTangerine Sorbet. Passion Fruit. Spring Flowers."
+    "description": "Citra and Amarillo hops blend in harmony over a bed of Golden Promise malt.\r\n\r\nTangerine Sorbet. Passion Fruit. Spring Flowers.",
+    "url": "https://shredbeercompany.com/menu/orange-bloom-ddh-hazy-ipa-7-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Hot Headed - West Coast IPA 6.6% ABV",
-    "url": "https://shredbeercompany.com/menu/hot-headed-west-coast-ipa-6-6-abv/",
-    "description": "Collaboration with wondrous brewing + berkeley yeast\r\n\r\nThis ain’t your grandma’s fruit salad. Hot Headed explodes with Nelson, Peacharine, Krush Cryo, and Columbus Cryo hops that slam your senses with razor-sharp resins, scorched citrus, and tropical chaos. It’s bitter, bone-dry, and merciless. No fluff. No compromise. Just raw, unrelenting hop fire."
+    "description": "Collaboration with wondrous brewing + berkeley yeast\r\n\r\nThis ain’t your grandma’s fruit salad. Hot Headed explodes with Nelson, Peacharine, Krush Cryo, and Columbus Cryo hops that slam your senses with razor-sharp resins, scorched citrus, and tropical chaos. It’s bitter, bone-dry, and merciless. No fluff. No compromise. Just raw, unrelenting hop fire.",
+    "url": "https://shredbeercompany.com/menu/hot-headed-west-coast-ipa-6-6-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Cosmic Swirl - Hazy IPA 7.2% ABV",
-    "url": "https://shredbeercompany.com/menu/cosmic-swirl-hazy-ipa-7-2-abv/",
-    "description": "Embark on a galactic journey with Cosmic Swirl, a bold and vibrant hazy IPA. Bursting with the interstellar flavors of Citra and Nectaron hops, this beer delivers a lush swirl of juicy citrus, tropical fruit, and cosmic haze. At 7.2% ABV, it’s a celestial experience—soft, smooth, and packed with flavor—perfect for when you’re ready to get lost in the stars 🚀"
+    "description": "Embark on a galactic journey with Cosmic Swirl, a bold and vibrant hazy IPA. Bursting with the interstellar flavors of Citra and Nectaron hops, this beer delivers a lush swirl of juicy citrus, tropical fruit, and cosmic haze. At 7.2% ABV, it’s a celestial experience—soft, smooth, and packed with flavor—perfect for when you’re ready to get lost in the stars 🚀",
+    "url": "https://shredbeercompany.com/menu/cosmic-swirl-hazy-ipa-7-2-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Vision Quest - Hazy IPA 6.7% ABV",
-    "url": "https://shredbeercompany.com/menu/vision-quest-hazy-ipa-6-7-abv/",
-    "description": "Step into the haze with Vision Quest, a radiant, hop-saturated Hazy IPA brewed with California-grown Admiral Maltings that sets the stage for a fruit-forward journey.\r\n\r\nDry-hopped with a dynamic duo of Citra and the vibrant New Zealand-grown Peacharine, this beer bursts with notes of white peach, ripe cantaloupe, and tropical fruit punch. Juicy, soft, and endlessly aromatic, Vision Quest is your guide to where haze meets harmony."
+    "description": "Step into the haze with Vision Quest, a radiant, hop-saturated Hazy IPA brewed with California-grown Admiral Maltings that sets the stage for a fruit-forward journey.\r\n\r\nDry-hopped with a dynamic duo of Citra and the vibrant New Zealand-grown Peacharine, this beer bursts with notes of white peach, ripe cantaloupe, and tropical fruit punch. Juicy, soft, and endlessly aromatic, Vision Quest is your guide to where haze meets harmony.",
+    "url": "https://shredbeercompany.com/menu/vision-quest-hazy-ipa-6-7-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Zero Degrees - Cold IPA 6.5% ABV",
-    "url": "https://shredbeercompany.com/menu/zero-degrees-cold-ipa-6-5-abv/",
-    "description": "100% Mosaic and Mosaic Cryo hops bring you vibrant flavors and aromas of blueberry fields, mango flesh, and top shelf herb.\r\n\r\n2024 GABF - Silver Medal - American-Style Strong Pale Ale\r\n\r\n2023 GABF - Bronze Medal - India Pale Lager or Cold India Pale Ale"
+    "description": "100% Mosaic and Mosaic Cryo hops bring you vibrant flavors and aromas of blueberry fields, mango flesh, and top shelf herb.\r\n\r\n2024 GABF - Silver Medal - American-Style Strong Pale Ale\r\n\r\n2023 GABF - Bronze Medal - India Pale Lager or Cold India Pale Ale",
+    "url": "https://shredbeercompany.com/menu/zero-degrees-cold-ipa-6-5-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Juice Master - Hazy DIPA 8.2% ABV",
-    "url": "https://shredbeercompany.com/menu/juice-master-hazy-dipa-8-2-abv/",
-    "description": "Concocted with lush amounts of Citra, Nelson, and Mosaic hops.\r\n\r\nOrange Sorbet. Fruity Pebbles. Kiwi Gushers.\r\n\r\n2025 World Beer Cup - Gold Medal - Juicy or Hazy Imperial IPA\r\n\r\n2024 GABF - Bronze Medal - Juicy or Hazy Imperial IPA"
+    "description": "Concocted with lush amounts of Citra, Nelson, and Mosaic hops.\r\n\r\nOrange Sorbet. Fruity Pebbles. Kiwi Gushers.\r\n\r\n2025 World Beer Cup - Gold Medal - Juicy or Hazy Imperial IPA\r\n\r\n2024 GABF - Bronze Medal - Juicy or Hazy Imperial IPA",
+    "url": "https://shredbeercompany.com/menu/juice-master-hazy-dipa-8-2-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Tenacious Weed - West Coast IPA 6.5% ABV",
-    "url": "https://shredbeercompany.com/menu/tenacious-weed-west-coast-ipa-6-5-abv/",
-    "description": "This New Zealand IPA struts onto the scene like a power chord from the gods. Packed with Nelson Cryo, Nelson, Riwaka, and Superdelic hops. Grab a can, turn up the volume, and prepare to be devoured.\r\n\r\nPassionfruit Explosions. Crushed Gooseberries. Psychedelic Citrus."
+    "description": "This New Zealand IPA struts onto the scene like a power chord from the gods. Packed with Nelson Cryo, Nelson, Riwaka, and Superdelic hops. Grab a can, turn up the volume, and prepare to be devoured.\r\n\r\nPassionfruit Explosions. Crushed Gooseberries. Psychedelic Citrus.",
+    "url": "https://shredbeercompany.com/menu/tenacious-weed-west-coast-ipa-6-5-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Ultra Sticky - West Coast IPA 6.7% ABV",
-    "url": "https://shredbeercompany.com/menu/ultra-sticky-west-coast-ipa-6-6-abv/",
-    "description": "High impact amounts of Mosaic Cryo, Mosaic, Strata, Citra, and Columbus Cryo hops.\r\n\r\nPassionfruit. Resin Sauce. Top Shelf Cannabis."
+    "description": "High impact amounts of Mosaic Cryo, Mosaic, Strata, Citra, and Columbus Cryo hops.\r\n\r\nPassionfruit. Resin Sauce. Top Shelf Cannabis.",
+    "url": "https://shredbeercompany.com/menu/ultra-sticky-west-coast-ipa-6-6-abv/"
   },
   {
+    "brewery": "Shred",
     "name": "Super Sonic Kronic - West Coast IPA 6.6% ABV",
-    "url": "https://shredbeercompany.com/menu/super-sonic-kronic-west-coast-ipa-6-6-abv/",
-    "description": "Blaze through the flavor zone with Super Sonic Kronic — a West Coast IPA that hits harder than a spin dash on a loop-de-loop. Powered by a radical combo of Mosaic, Nelson, Krush, and Krush Cryo, this brew explodes with notes of sticky mango, white grape, and valencia oranges."
+    "description": "Blaze through the flavor zone with Super Sonic Kronic — a West Coast IPA that hits harder than a spin dash on a loop-de-loop. Powered by a radical combo of Mosaic, Nelson, Krush, and Krush Cryo, this brew explodes with notes of sticky mango, white grape, and valencia oranges.",
+    "url": "https://shredbeercompany.com/menu/super-sonic-kronic-west-coast-ipa-6-6-abv/"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Pineapple Lime",
+    "description": "(GF) Pineapple, Sweet Lime",
+    "style": "Hard Seltzer",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "ð¥ Watermelon Mint",
+    "description": "(GF) Contains: Watermelon, Mint",
+    "style": "Hard Seltzer",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Mosaic Moon",
+    "description": "Hops:  Mosaic, Citra, Ekuanot, Amarillo",
+    "style": "WC Pale",
+    "abv": "5.8%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "ð¥ Five Oh Five â»ï¸",
+    "description": "Hops: Citra",
+    "style": "WC Pale",
+    "abv": "6%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "ð¥Outrigger",
+    "description": "Hops: Citra, Mosaic, Simcoe",
+    "style": "WC IPA",
+    "abv": "7%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "So Many Colors, So Little Time",
+    "description": "Hops: Mosaic, Strata, Riwaka, Nelson",
+    "style": "WC IPA",
+    "abv": "7.2%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "A Fistful of Citra",
+    "description": "Hops: Citra",
+    "style": "WC DIPA",
+    "abv": "7.5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Bone Frog â»ï¸",
+    "description": "Hops: Citra, Mosaic, Amarillo",
+    "style": "NE Pale",
+    "abv": "6%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Thick Juicy Layer â»ï¸",
+    "description": "Hops: Citra, House Blend",
+    "style": "NE IPA",
+    "abv": "6.6%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Freshly Mowed â»ï¸",
+    "description": "Hops: El Dorado, Krush, Mosaic, Citra",
+    "style": "NE IPA",
+    "abv": "6.8%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Cool Cool â»ï¸",
+    "description": "Hops: Mosaic, Pacific Sunrise, Nelson, Peacharine",
+    "style": "NE IPA",
+    "abv": "7%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "ð¥Electric Lettuce â»ï¸",
+    "description": "Hops: Citra, Mosaic",
+    "style": "NE DIPA",
+    "abv": "8.5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Desert Star â»ï¸",
+    "description": "Contains: Flaked Maize, Jasmine Rice",
+    "style": "Lager",
+    "abv": "4.5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Helles",
+    "description": "Hops: Saphir, Magnum, Grungeist",
+    "style": "Helles Lager",
+    "abv": "4.5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "12Â°",
+    "description": "Hops: Czech Saaz",
+    "style": "Czech Pale Lager",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Boho Pils",
+    "description": "Hops: Czech Saaz",
+    "style": "Czech Pilsner",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "El Tigre Loco â»ï¸",
+    "description": "Hops: Grungeist, Mittelfruh",
+    "style": "Mexican Style Lager",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Miss Conduct",
+    "description": "Hops: Lorien",
+    "style": "Blonde Ale",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Americano â»ï¸",
+    "description": "Contains: Moonraker Coffee, Vanilla, Milk Sugar",
+    "style": "Milk Stout",
+    "abv": "6%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Foam Walker",
+    "description": "Contains: Sea Salt, Coffee, Vanilla, Milk Sugar, Nitrogen",
+    "style": "Nitro Stout",
+    "abv": "8%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Petite Planet",
+    "description": "Contains: Blueberry, Lemon, Vanilla",
+    "style": "Kettle Sour",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Wave Theory",
+    "description": "Contains: Lemon, Lime, and Orange Zest; Black Himalayan Sea Salt",
+    "style": "Gose",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Strawberry Rhubarb Pie",
+    "description": "Contains: Strawberry, Rhubarb, Vanilla, Graham Cracker, Milk Sugar",
+    "style": "Kettle Sour",
+    "abv": "6%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "ð¥ Saison Julia  â»ï¸",
+    "description": "Limited Release; Aged in Wine Barrels for 2 Years",
+    "style": "Saison",
+    "abv": "6.7%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Cans To Go = â»ï¸",
+    "description": "Don't see your favorite beer to go? Ask about our growler options today.\nCans and Growlers are to go only, not for on-site consumption!",
+    "style": "",
+    "abv": ""
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "Vindicator West Coast IPA",
+    "description": "Hoppy, Citrus, Piney - 6.5% Alc/Vol"
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "Alohawk Strong Ale",
+    "description": "Honey, Smooth, Malty - 8% Alc/Vol"
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "Tasty Waves West Coast IPA",
+    "description": "Centennial, Grapefruit, Citra - 6.6% Alc/Vol"
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "Allgood Hazy IPA",
+    "description": "Citrus, Tropical, Juicy - 7.5% Alc/Vol"
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "Loomis Lite",
+    "description": "Crisp, Clear, Refreshing - 4% Alc/Vol"
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "The Haka Hazy IPA",
+    "description": "New Zealand Hops, Stonefruit, Soft Body - 6.3% Alc/Vol"
+  },
+  {
+    "brewery": "Loomis Basin",
+    "name": "TacoCat Mexican Lager",
+    "description": "Golden, Soft, Toasty - 4.6% Alc/Vol"
   }
 ]
