@@ -27,7 +27,7 @@ function loadTaplist() {
 }
 
 
-loadTaplist()
+taplist = loadTaplist()
 
 // --- express app ---
 const app = express()
@@ -209,8 +209,8 @@ function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist = []) {
     : 'Adopt a “rude-but-fun bartender” vibe—blunt, witty, but helpful.'
 
   const taplistJSON = (Array.isArray(taplist) && taplist.length > 0)
-    ? JSON.stringify(taplist.slice(0, 20), null, 2)
-    : null
+  ? JSON.stringify(taplist, null, 2)
+  : null
 
   const taplistSection = taplistJSON
     ? `This is the current taplist as structured data (JSON array of beers with name, description, and ABV):\n\n${taplistJSON}`
