@@ -25,12 +25,6 @@
   },
   {
     "brewery": "Shred",
-    "name": "Skaze Or Die! - Hazy DIPA ABV 8.5%",
-    "description": "Collaboration with Alvarado Street Brewery.\r\n\r\nGet ready to drop in! Channel your inner shredder from this super sick combo of Galaxy, Citra, Krush, and Krush Cryo hops. An adrenaline rush of pineapple sorbet, guava purée, and peach gummies infiltrate your olfactory senses.\r\n\r\nThis beer is ready to launch, and it's ready to take you with it!",
-    "url": "https://shredbeercompany.com/menu/skaze-or-die-hazy-dipa-abv-8-5/"
-  },
-  {
-    "brewery": "Shred",
     "name": "Micro Blaster - Session IPA 5% ABV",
     "description": "Blurring the lines of Session IPA and Pale Ale, this absolute hop crusher gets blasted with powerful charges of Nelson, Mosaic, and Simcoe. Punchy notes of blueberry forest, rock fruit, and southern hemi diesel.\r\n\r\n2025 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2024 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2023 GABF - Bronze Medal - Session India Pale Ale",
     "url": "https://shredbeercompany.com/menu/micro-blaster-session-ipa-5-abv/"
@@ -40,12 +34,6 @@
     "name": "Orange Bloom - DDH Hazy IPA 7% ABV",
     "description": "Citra and Amarillo hops blend in harmony over a bed of Golden Promise malt.\r\n\r\nTangerine Sorbet. Passion Fruit. Spring Flowers.",
     "url": "https://shredbeercompany.com/menu/orange-bloom-ddh-hazy-ipa-7-abv/"
-  },
-  {
-    "brewery": "Shred",
-    "name": "Hot Headed - West Coast IPA 6.6% ABV",
-    "description": "Collaboration with wondrous brewing + berkeley yeast\r\n\r\nThis ain’t your grandma’s fruit salad. Hot Headed explodes with Nelson, Peacharine, Krush Cryo, and Columbus Cryo hops that slam your senses with razor-sharp resins, scorched citrus, and tropical chaos. It’s bitter, bone-dry, and merciless. No fluff. No compromise. Just raw, unrelenting hop fire.",
-    "url": "https://shredbeercompany.com/menu/hot-headed-west-coast-ipa-6-6-abv/"
   },
   {
     "brewery": "Shred",
@@ -90,9 +78,28 @@
     "url": "https://shredbeercompany.com/menu/super-sonic-kronic-west-coast-ipa-6-6-abv/"
   },
   {
+    "brewery": "Shred",
+    "name": "Shred IPA - West Coast IPA 6.5 % ABV",
+    "description": "Introducing simply - Shred IPA!\r\n\r\nWe carefully selected a blend of Mosaic, Citra, Simcoe, and CTZ hops to showcase intense hoppy deliciousness over a lean malt canvas. Bright tropical fruits paired with dank cannabis notes shine through on the palate for a most excellent sensory experience",
+    "url": "https://shredbeercompany.com/menu/shred-ipa-west-coast-ipa-6-5-abv/"
+  },
+  {
+    "brewery": "Shred",
+    "name": "Hop Suey - West Coast DIPA 8.5% ABV",
+    "description": "Cooked up with a saucy medley of Mosaic Cryo, Mosaic, Nelson, and Strata hops.\r\n\r\nBlueberry Kief. Mango Gummies. Southern Hemi Diesel.",
+    "url": "https://shredbeercompany.com/menu/hop-suey-west-coast-dipa-8-5-abv/"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Kiwi Strawberry",
+    "description": "(GF) Contains: Kiwi, Strawberry",
+    "style": "Hard Seltzer",
+    "abv": "5%"
+  },
+  {
     "brewery": "Moonraker",
     "name": "Pineapple Lime",
-    "description": "(GF) Pineapple, Sweet Lime",
+    "description": "(GF) Contains: Pineapple, Sweet Lime",
     "style": "Hard Seltzer",
     "abv": "5%"
   },
@@ -105,13 +112,6 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "Mosaic Moon",
-    "description": "Hops:  Mosaic, Citra, Ekuanot, Amarillo",
-    "style": "WC Pale",
-    "abv": "5.8%"
-  },
-  {
-    "brewery": "Moonraker",
     "name": "ð¥ Five Oh Five â»ï¸",
     "description": "Hops: Citra",
     "style": "WC Pale",
@@ -119,24 +119,10 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "ð¥Outrigger",
+    "name": "ð¥Outrigger â»ï¸",
     "description": "Hops: Citra, Mosaic, Simcoe",
     "style": "WC IPA",
     "abv": "7%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "So Many Colors, So Little Time",
-    "description": "Hops: Mosaic, Strata, Riwaka, Nelson",
-    "style": "WC IPA",
-    "abv": "7.2%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "A Fistful of Citra",
-    "description": "Hops: Citra",
-    "style": "WC DIPA",
-    "abv": "7.5%"
   },
   {
     "brewery": "Moonraker",
@@ -154,6 +140,13 @@
   },
   {
     "brewery": "Moonraker",
+    "name": "Double Scoop â»ï¸",
+    "description": "Hops: Citra, Riwaka",
+    "style": "NE IPA",
+    "abv": "6.8%"
+  },
+  {
+    "brewery": "Moonraker",
     "name": "Freshly Mowed â»ï¸",
     "description": "Hops: El Dorado, Krush, Mosaic, Citra",
     "style": "NE IPA",
@@ -161,24 +154,10 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "Cool Cool â»ï¸",
-    "description": "Hops: Mosaic, Pacific Sunrise, Nelson, Peacharine",
-    "style": "NE IPA",
-    "abv": "7%"
-  },
-  {
-    "brewery": "Moonraker",
     "name": "ð¥Electric Lettuce â»ï¸",
     "description": "Hops: Citra, Mosaic",
     "style": "NE DIPA",
     "abv": "8.5%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Desert Star â»ï¸",
-    "description": "Contains: Flaked Maize, Jasmine Rice",
-    "style": "Lager",
-    "abv": "4.5%"
   },
   {
     "brewery": "Moonraker",
@@ -203,13 +182,6 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "El Tigre Loco â»ï¸",
-    "description": "Hops: Grungeist, Mittelfruh",
-    "style": "Mexican Style Lager",
-    "abv": "5%"
-  },
-  {
-    "brewery": "Moonraker",
     "name": "Miss Conduct",
     "description": "Hops: Lorien",
     "style": "Blonde Ale",
@@ -224,10 +196,10 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "Foam Walker",
-    "description": "Contains: Sea Salt, Coffee, Vanilla, Milk Sugar, Nitrogen",
-    "style": "Nitro Stout",
-    "abv": "8%"
+    "name": "Peach Pie",
+    "description": "Contains: Peach, Vanilla, Graham Cracker, Milk Sugar",
+    "style": "Kettle Sour",
+    "abv": "5%"
   },
   {
     "brewery": "Moonraker",
@@ -235,20 +207,6 @@
     "description": "Contains: Blueberry, Lemon, Vanilla",
     "style": "Kettle Sour",
     "abv": "5%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Wave Theory",
-    "description": "Contains: Lemon, Lime, and Orange Zest; Black Himalayan Sea Salt",
-    "style": "Gose",
-    "abv": "5%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Strawberry Rhubarb Pie",
-    "description": "Contains: Strawberry, Rhubarb, Vanilla, Graham Cracker, Milk Sugar",
-    "style": "Kettle Sour",
-    "abv": "6%"
   },
   {
     "brewery": "Moonraker",
