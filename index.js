@@ -46,8 +46,6 @@ app.get('/health', (_req, res) => res.json({ ok: true }))
 
 // ---------- openai client ----------
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-// your stored prompt id
-const PROMPT_ID = 'pmpt_68c0625c48908190a8e6e8b349e3747b0947b36c242caf18'
 
 // ---------- sqlite ----------
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'beerbot.db')
@@ -65,7 +63,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
-  snark_level TEXT DEFAULT 'Mild',
+  snark_level TEXT DEFAULT 'Spicy',
   kid_safe INTEGER DEFAULT 0,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -83,15 +81,6 @@ CREATE TABLE IF NOT EXISTS messages (
 try { db.exec(`ALTER TABLE messages ADD COLUMN user_id TEXT`); } catch {}
 
 // ---------- helpers ----------
-const SNARK_LEVELS = ['Off', 'Mild', 'Medium', 'Spicy', 'Extra']
-function normalizeSnark(input = 'Mild') {
-  const v = String(input).trim().toLowerCase()
-  if (v.startsWith('off')) return 'Off'
-  if (v.startsWith('mild') || v === 'low' || v === '1') return 'Mild'
-  if (v.startsWith('med') || v === '2') return 'Medium'
-  if (v.startsWith('spic') || v === '3') return 'Spicy'
-  return 'Extra'
-}
 const rid = (n = 16) => crypto.randomBytes(n).toString('hex')
 
 // ---------- SQL prepared statements ----------
@@ -185,101 +174,66 @@ app.get('/me', requireAuth, (req, res) => {
   res.json({ user: { id: req.user.id, email: req.user.email } })
 })
 
-// ---------- local fallback prompt (used only if Prompt-ID call fails) ----------
-function SYSTEM_PROMPT(snark, kidSafe = false, taplist = []) {
-  const snarkLevel = normalizeSnark(snark)
+// ---------- system prompt (fixed Spicy tone) ----------
+function SYSTEM_PROMPT(kidSafe = false, taplist = []) {
   const KidSafe = !!kidSafe
   const tap = Array.isArray(taplist) ? taplist : []
   const TaplistJSON = JSON.stringify(tap, null, 2)
 
   return `
 Prompt Name: Bitter-Buddy
+
 Context:
-- {{snarklevel}}: ${snarkLevel}
-- {{kidsafe}}: ${KidSafe}
-- {{taplist}}: ${TaplistJSON}
+- SnarkLevel: Spicy            // fixed: snarky pub-banter
+- KidSafe: ${KidSafe}
+- Taplist: ${TaplistJSON}
 
-You are "Beer Bot," a blunt and witty cicerone specializing in beer-related queries.  
-Use playful banter and sarcasm within brief responses—always limit your entire reply to just a few short sentences.  
-Never use slurs, threats, or reference protected traits.  
-Direct humor at fictional laziness, “generic brewers,” or (playfully) the user—never bully or mean-spirited.  
+You are "Beer Bot," a blunt, witty cicerone who ONLY answers beer-related queries.
+Keep responses to 1–4 short sentences, with salty pub-banter; short punchlines; keep it good-natured.
+Never use slurs, threats, or jokes about protected traits.
+Aim roasts at generic laziness, “generic brewers,” or (lightly) the user—never mean-spirited.
+Adopt a “snobby cicerone” vibe—confident, slightly superior, but helpful.
+Adopt a “rude-but-fun bartender” vibe—blunt, witty, but helpful.
+KidSafe=true:
+- Do NOT recommend beer.
+- Politely and humorously tell them kids shouldn't use a beer bot.
 
-Every request will have a "SnarkLevel", see below and use the appropriate response.  
-If {{kidsafe}} = true, return a funny but polite response suitable for children, telling them they shouldn't be using a "Beer Bot" as a child!  
-Do not give any beer recommendations if kidSafe = true.  
+Core behavior:
+- Always give witty, accurate, concise beer guidance (ABV/IBU ranges, flavor notes, style relatives, glassware when relevant).
+- Answer in 2–4 sentences.
+- Never use slurs or target protected traits. Never threaten. Never bully real individuals.
+- If the user requests a beer that’s NOT on tap or not available, do BOTH:
+  1) Suggest the closest stylistic substitute that is plausible for a typical venue.
+  2) Add ONE playful roast blaming the user or the brewery (good-natured). Examples:
+     "It’s on their website? Classic—maybe the keg mysteriously walked away."
+     "Tell the brewery to stop playing hide-and-tap with their listings."
+     "No Mega Gummy Worms? Fine. Try this instead—similar vibe, fewer imaginary kegs."
+- If you don’t know the taplist, ask for it once (politely snarky), then recommend a widely available substitute.
+- Keep roasts short (one line max). Prioritize usefulness over jokes.
 
----
+When recommending:
+- Name the style and 1–2 defining flavor cues (e.g., “piney, resinous; dry finish”).
+- For hazies: juice/citrus/tropical and softness; for West Coast: pine/citrus and dry finish, etc.
+- If ABV matters, aim within range and state it when useful.
 
-If a requested beer isn’t available, recommend a close alternative with a playful roast suitable for the SnarkLevel:
-
-{{snarklevel}}:  
-- Off: Factual, no sarcasm.  
-- Mild: Gentle sarcasm.  
-- Medium: Slightly more sarcasm than Mild.  
-- Spicy: Snarky pub-banter.  
-- Extra: Vulgar but funny pub-banter.  
-
----
-
-If the request isn’t beer-related, use the appropriate snark to remind the user that only beer content is allowed.  
-
----
-
-Rules:  
-- Never bully anyone or use profanity if in kids’ mode.  
-- Insults must be playful, never mean, and focus on laziness, “generic brewers,” or the user.  
-- No references or jokes about protected traits.  
-- Always keep responses strictly beer-focused, nudging back on topic if needed.  
-- Adhere to SnarkLevel and kids’ mode.  
-
----
-
-Process:  
-1. Analyze the user’s request.  
-2. If beer-related, respond or recommend a substitute if needed, then add the roast, using the right tone for SnarkLevel and kids’ mode.  
-3. If not beer-related, nudge the user back on-topic, using appropriate snark.  
-4. Briefly display reasoning before the final quip and answer, all within a few short sentences.  
-
----
-
-Output Format:  
-Respond with a single, concise paragraph—never more than a few short sentences.  
-Begin with your reasoning and logic, followed by the roast/snark (if applicable), then the recommendation or answer.  
-Never use bullet points or lists.  
-
----
-
-Example 1:  
-Input: BeerRequest: “Got any Westvleteren 12?” | SnarkLevel: Mild | kidSafe: Off  
-Output: Westvleteren 12 is elusive, but Rochefort 10 comes close—don’t worry, your rare-beer credentials are still intact.  
-
-Example 2:  
-Input: BeerRequest: “Whiskey, please” | SnarkLevel: Spicy | kidSafe: Off  
-Output: Nice try, but this is a beer joint—save the whiskey requests for the speakeasy next door.  
-
----
-
-Important:  
-- Always start with reasoning, then roast/snark, then the main recommendation or answer—all within a few brief sentences.  
-- Adjust language and humor for SnarkLevel and kids’ mode.  
-- Only beer content allowed.  
-
+Formatting:
+- No bullets unless the user asks—just tight sentences.
+- If KidSafe=true, automatically replace any swear with a clean alternative.
 `.trim()
 }
 
 // ---------- chat route ----------
-const MAX_TURNS = 100 // last 100 user+assistant turns
+const MAX_TURNS = 50 // last 50 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message, snarkLevel, kidSafe, taplist } = req.body ?? {}
+    const { message, kidSafe, taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
-    // normalize / persist session prefs
-    const snark = normalizeSnark(snarkLevel ?? 'Mild')
-    const ksafe = !!kidSafe
+    // persist session prefs (snark fixed to Spicy)
     const sessionId = req.user.id
-    upsertSession.run({ id: sessionId, snark_level: snark, kid_safe: ksafe ? 1 : 0 })
+    const ksafe = !!kidSafe
+    upsertSession.run({ id: sessionId, snark_level: 'Spicy', kid_safe: ksafe ? 1 : 0 })
 
     // recent history
     const need = MAX_TURNS * 2
@@ -288,69 +242,43 @@ app.post('/chat', requireAuth, async (req, res) => {
     // taplist (client override preferred)
     const taplistNow = Array.isArray(taplist) && taplist.length ? taplist : loadTaplist()
 
-    // server-side debug
-    const dbg = {
-      received: { message, snarkLevel, kidSafe },
-      normalized: { snark, kidSafe: ksafe },
-      taplistSize: taplistNow.length,
-    }
-    console.log('BB/CHAT RECV →', JSON.stringify(dbg))
+    // debug
+    console.log('BB/CHAT RECV →', JSON.stringify({
+      received: { message, kidSafe: ksafe },
+      taplistSize: taplistNow.length
+    }))
 
     // save user message
     insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
 
-    // Build messages for conversation
-    const messages = [
+    // Build messages (system prompt + history + user)
+    const input = [
+      { role: 'system', content: SYSTEM_PROMPT(ksafe, taplistNow) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
 
-    let text, usedPath
-
-    try {
-      // Preferred: stored prompt by ID with variables
-      const resp = await client.responses.create({
-        model: 'gpt-5',
-        prompt: PROMPT_ID,
-        input: messages,
-        variables: {
-          snarkLevel: snark,
-          kidSafe: ksafe,
-          taplist: JSON.stringify(taplistNow)
-        }
-      })
-      text = resp.output_text ?? '(no reply)'
-      usedPath = 'prompt-id'
-      console.log('BB/CHAT USED → prompt-id')
-    } catch (e) {
-      // Fallback to local system prompt
-      console.error('BB/CHAT prompt-id failed →', e?.message || e)
-      const input = [
-        { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, taplistNow) },
-        ...messages
-      ]
-      const resp2 = await client.responses.create({ model: 'gpt-5', input })
-      text = resp2.output_text ?? '(no reply)'
-      usedPath = 'fallback-system'
-      console.log('BB/CHAT USED → fallback-system')
-    }
+    // OpenAI call (no Prompt-ID)
+    const response = await client.responses.create({
+      model: 'gpt-4.1-mini',
+      input
+    })
+    const text = response.output_text ?? '(no reply)'
 
     // save assistant reply
     insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
 
-    // Include meta in headers + JSON so you can see it in Android Logcat
     res
-      .set('x-bb-used', usedPath)
-      .set('x-bb-snark', snark)
+      .set('x-bb-used', 'system-prompt-spicy')
+      .set('x-bb-snark', 'Spicy')
       .set('x-bb-kidSafe', String(ksafe))
       .set('x-bb-taplist', String(taplistNow.length))
-      .json({ reply: text, meta: { used: usedPath, snarkLevel: snark, kidSafe: ksafe, taplistSize: taplistNow.length } })
+      .json({ reply: text, meta: { used: 'system-prompt-spicy', snarkLevel: 'Spicy', kidSafe: ksafe, taplistSize: taplistNow.length } })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
-
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
