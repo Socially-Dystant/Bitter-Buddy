@@ -247,49 +247,59 @@ const MAX_TURNS = 100 // last 100 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message, snarkLevel, kidSafe, snobby, taplist } = req.body ?? {}
-    if (!message) return res.status(400).json({ error: 'message required' })
+    const { message, snarkLevel, kidSafe, taplist } = req.body ?? {};
+    if (!message) return res.status(400).json({ error: 'message required' });
 
-    const snark = normalizeSnark(snarkLevel ?? 'Mild')
-    const ksafe = !!kidSafe
-    const snob  = !!snobby
+    // Normalize inputs
+    const snark = normalizeSnark(snarkLevel ?? 'Mild'); // -> Off|Mild|Medium|Spicy|Extra
+    const ksafe = !!kidSafe;
 
-    // make sure a sessions row exists to satisfy FK (use user.id as session_id)
-    const sessionId = req.user.id
+    // Persist session prefs (keep schema compatible; set snobby=0)
+    const sessionId = req.user.id;
     upsertSession.run({
       id: sessionId,
       snark_level: snark,
       kid_safe: ksafe ? 1 : 0,
-      snobby: snob ? 1 : 0
-    })
+      snobby: 0
+    });
 
-    // recent history (unchanged)
-    const need = MAX_TURNS * 2
-    const recent = getRecentUserMessages.all(req.user.id, need).reverse()
+    // Recent per-user history (unchanged)
+    const need = MAX_TURNS * 2;
+    const recent = getRecentUserMessages.all(req.user.id, need).reverse();
 
-    const taplistNow = loadTaplist()
+    // Taplist: prefer client-provided array when present; else load server copy
+    const taplistNow = Array.isArray(taplist) && taplist.length > 0 ? taplist : loadTaplist();
+    console.log(`🧪 Loaded taplist with ${taplistNow.length} beers (source: ${Array.isArray(taplist) && taplist.length ? 'client' : 'server'})`);
+    console.log(`🎚️ snark=${snark} kidSafe=${ksafe}`);
+
+    // Build prompt + messages
+    const system = SYSTEM_PROMPT(snark, ksafe, /*snobby*/ false, taplistNow);
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, snob, taplistNow) },
+      { role: 'system', content: system },
       ...recent,
       { role: 'user', content: String(message) }
-    ]
-    console.log(`🧪 Loaded taplist with ${taplistNow.length} beers`)
+    ];
 
-    // save user message (note the 4 args now: user_id, session_id, role, content)
-    insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
+    // Save user message
+    insertMsgUser.run(req.user.id, sessionId, 'user', String(message));
 
-    const response = await client.responses.create({ model: 'gpt-4.1-mini', input })
-    const text = response.output_text ?? '(no reply)'
+    // Call OpenAI
+    const response = await client.responses.create({
+      model: 'gpt-4.1-mini',
+      input
+    });
+    const text = response.output_text ?? '(no reply)';
 
-    // save assistant message
-    insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
+    // Save assistant reply
+    insertMsgUser.run(req.user.id, sessionId, 'assistant', text);
 
-    res.json({ reply: text })
+    res.json({ reply: text });
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
+    console.error(err);
+    res.status(500).json({ error: 'server_error', detail: String(err.message || err) });
   }
-})
+});
+
 
 
 // --- history & reset (per user) ---
