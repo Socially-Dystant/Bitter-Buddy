@@ -68,7 +68,6 @@ CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
   snark_level TEXT DEFAULT 'Mild',
   kid_safe INTEGER DEFAULT 0,
-  snobby INTEGER DEFAULT 0,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS messages (
@@ -106,13 +105,12 @@ const getUserById    = db.prepare(`SELECT * FROM users WHERE id = ?`)
 
 // sessions (kept for possible future per-user prefs)
 const upsertSession = db.prepare(`
-INSERT INTO sessions (id, snark_level, kid_safe, snobby)
-VALUES (@id, @snark_level, @kid_safe, @snobby)
+INSERT INTO sessions (id, snark_level, kid_safe)
+VALUES (@id, @snark_level, @kid_safe)
 ON CONFLICT(id) DO UPDATE SET
   snark_level=excluded.snark_level,
-  kid_safe=excluded.kid_safe,
-  snobby=excluded.snobby
-`)
+  kid_safe=excluded.kid_safe
+   `)
 const getSession = db.prepare(`SELECT * FROM sessions WHERE id = ?`)
 
 // messages (per-user)
@@ -192,7 +190,7 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // --- system prompt ---
-function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist = []) {
+function SYSTEM_PROMPT(snark, kidSafe = false, taplist = []) {
   // --- Normalize inputs ---
   const sn = String(snark || 'Mild').trim().toLowerCase()
   const SnarkLevel =
@@ -203,7 +201,6 @@ function SYSTEM_PROMPT(snark, kidSafe = false, snobby = false, taplist = []) {
     'Extra'
 
   const KidSafe = !!kidSafe
-  const Snobby = !!snobby
   const tap = Array.isArray(taplist) ? taplist : []
   const TaplistJSON = JSON.stringify(tap, null, 2)
 
@@ -214,7 +211,6 @@ Prompt Name: Bitter-Buddy
 Context:
 - SnarkLevel: ${SnarkLevel}            // One of: Off, Mild, Medium, Spicy, Extra
 - KidSafe: ${KidSafe}                  // true | false
-- Snobby: ${Snobby}                    // true | false (affects vibe only)
 - Taplist: ${TaplistJSON}              // JSON array of beers (name, style, abv, url/description)
 
 You are "Beer Bot," a blunt and witty cicerone who answers ONLY beer-related queries. Replies must be ONE short paragraph (1–3 brief sentences total). No slurs, no threats, and no jokes about protected traits. Humor targets generic laziness, “generic brewers,” or (playfully) the user—never mean-spirited. If KidSafe=true, do NOT recommend beer; reply politely and humorously that kids shouldn’t use a beer bot.
@@ -254,13 +250,12 @@ app.post('/chat', requireAuth, async (req, res) => {
     const snark = normalizeSnark(snarkLevel ?? 'Mild'); // -> Off|Mild|Medium|Spicy|Extra
     const ksafe = !!kidSafe;
 
-    // Persist session prefs (keep schema compatible; set snobby=0)
+    // Persist session prefs (keep schema compatible)
     const sessionId = req.user.id;
     upsertSession.run({
       id: sessionId,
       snark_level: snark,
-      kid_safe: ksafe ? 1 : 0,
-      snobby: 0
+      kid_safe: ksafe ? 1 : 0
     });
 
     // Recent per-user history (unchanged)
@@ -273,7 +268,7 @@ app.post('/chat', requireAuth, async (req, res) => {
     console.log(`🎚️ snark=${snark} kidSafe=${ksafe}`);
 
     // Build prompt + messages
-    const system = SYSTEM_PROMPT(snark, ksafe, /*snobby*/ false, taplistNow);
+    const system = SYSTEM_PROMPT(snark, ksafe, taplistNow);
     const input = [
       { role: 'system', content: system },
       ...recent,
