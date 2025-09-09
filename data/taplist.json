@@ -98,8 +98,8 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "Pineapple Lime",
-    "description": "(GF) Contains: Pineapple, Sweet Lime",
+    "name": "P. Y. G.",
+    "description": "(GF) Contains: Passionfruit, Yuzu Citrus, Pink Guava",
     "style": "Hard Seltzer",
     "abv": "5%"
   },
@@ -112,7 +112,7 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "ð¥ Five Oh Five â»ï¸",
+    "name": "ð¥ Five Oh Five",
     "description": "Hops: Citra",
     "style": "WC Pale",
     "abv": "6%"
@@ -126,10 +126,17 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "Bone Frog â»ï¸",
-    "description": "Hops: Citra, Mosaic, Amarillo",
-    "style": "NE Pale",
-    "abv": "6%"
+    "name": "ð¥ Sticky Bear â»ï¸",
+    "description": "Hops: Citra, Mosaic, El Dorado",
+    "style": "WC IPA",
+    "abv": "7.3%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Dankish â»ï¸",
+    "description": "Hops: Mosaic, Nelson, Riwaka, Columbus",
+    "style": "WC DIPA",
+    "abv": "7.8%"
   },
   {
     "brewery": "Moonraker",
@@ -154,10 +161,17 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "ð¥Electric Lettuce â»ï¸",
-    "description": "Hops: Citra, Mosaic",
+    "name": "Cool Cool",
+    "description": "Hops: Mosaic, Vic  Secret",
+    "style": "NE IPA",
+    "abv": "7%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Juice Nukem â»ï¸",
+    "description": "Hops: Mosaic, Nelson, Strata, Simcoe",
     "style": "NE DIPA",
-    "abv": "8.5%"
+    "abv": "8%"
   },
   {
     "brewery": "Moonraker",
@@ -168,22 +182,36 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "12Â°",
-    "description": "Hops: Czech Saaz",
-    "style": "Czech Pale Lager",
-    "abv": "5%"
+    "name": "Oui Oui",
+    "description": "Hops: Strisselspalt",
+    "style": "French Pilsner",
+    "abv": "4.5%"
   },
   {
     "brewery": "Moonraker",
-    "name": "Boho Pils",
+    "name": "Boho Pils â»ï¸",
     "description": "Hops: Czech Saaz",
     "style": "Czech Pilsner",
     "abv": "5%"
   },
   {
     "brewery": "Moonraker",
+    "name": "El Tigre Loco",
+    "description": "Hops: Grungeist, Mittelfruh",
+    "style": "Mexican Style Lager",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
     "name": "Miss Conduct",
     "description": "Hops: Lorien",
+    "style": "Blonde Ale",
+    "abv": "5%"
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "ð¥Miss Behave â»ï¸",
+    "description": "Hops: Lorien; Contains: Patagonia Honey",
     "style": "Blonde Ale",
     "abv": "5%"
   },
@@ -198,13 +226,6 @@
     "brewery": "Moonraker",
     "name": "Peach Pie",
     "description": "Contains: Peach, Vanilla, Graham Cracker, Milk Sugar",
-    "style": "Kettle Sour",
-    "abv": "5%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Petite Planet",
-    "description": "Contains: Blueberry, Lemon, Vanilla",
     "style": "Kettle Sour",
     "abv": "5%"
   },
