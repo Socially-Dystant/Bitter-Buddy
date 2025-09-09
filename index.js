@@ -186,22 +186,22 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // ---------- local fallback prompt (used only if Prompt-ID call fails) ----------
-function SYSTEM_PROMPT(snark, kidSafe = false, taplist = []) {
-  const SnarkLevel = normalizeSnark(snark)
-  const KidSafe = !!kidSafe
+function SYSTEM_PROMPT(snark, kidsafe = false, taplist = []) {
+  const snarklevel = normalizeSnark(snark)
+  const KidSafe = !!kidsafe
   const tap = Array.isArray(taplist) ? taplist : []
   const TaplistJSON = JSON.stringify(tap, null, 2)
 
   return `
 Prompt Name: Bitter-Buddy
 Context:
-- SnarkLevel: ${SnarkLevel}
+- snarklevel: ${snarklevel}
 - KidSafe: ${KidSafe}
 - Taplist: ${TaplistJSON}
 
 You are "Beer Bot," a blunt and witty cicerone who answers ONLY beer-related queries. Replies must be ONE short paragraph (1–3 brief sentences). No slurs, no threats. Humor targets generic laziness, “generic brewers,” or (playfully) the user. If KidSafe=true, do NOT recommend beer; reply politely and humorously that kids shouldn’t use a beer bot.
 
-Tone by SnarkLevel:
+Tone by snarklevel:
 - Off: factual
 - Mild: gentle sarcasm
 - Medium: more bite
@@ -221,12 +221,12 @@ const MAX_TURNS = 100 // last 100 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message, snarkLevel, kidSafe, taplist } = req.body ?? {}
+    const { message, snarklevel, kidsafe, taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
     // normalize / persist session prefs
-    const snark = normalizeSnark(snarkLevel ?? 'Mild')
-    const ksafe = !!kidSafe
+    const snark = normalizeSnark(snarklevel ?? 'Mild')
+    const ksafe = !!kidsafe
     const sessionId = req.user.id
     upsertSession.run({ id: sessionId, snark_level: snark, kid_safe: ksafe ? 1 : 0 })
 
@@ -239,8 +239,8 @@ app.post('/chat', requireAuth, async (req, res) => {
 
     // server-side debug
     const dbg = {
-      received: { message, snarkLevel, kidSafe },
-      normalized: { snark, kidSafe: ksafe },
+      received: { message, snarklevel, kidsafe },
+      normalized: { snark, kidsafe: ksafe },
       taplistSize: taplistNow.length,
     }
     console.log('BB/CHAT RECV →', JSON.stringify(dbg))
@@ -263,8 +263,8 @@ app.post('/chat', requireAuth, async (req, res) => {
         prompt: PROMPT_ID,
         input: messages,
         variables: {
-          snarkLevel: snark,
-          kidSafe: ksafe,
+          snarklevel: snark,
+          kidsafe: ksafe,
           taplist: JSON.stringify(taplistNow)
         }
       })
@@ -293,7 +293,7 @@ app.post('/chat', requireAuth, async (req, res) => {
       .set('x-bb-snark', snark)
       .set('x-bb-kidsafe', String(ksafe))
       .set('x-bb-taplist', String(taplistNow.length))
-      .json({ reply: text, meta: { used: usedPath, snarkLevel: snark, kidSafe: ksafe, taplistSize: taplistNow.length } })
+      .json({ reply: text, meta: { used: usedPath, snarklevel: snark, kidsafe: ksafe, taplistSize: taplistNow.length } })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
