@@ -64,7 +64,6 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
   snark_level TEXT DEFAULT 'Spicy',
-  kid_safe INTEGER DEFAULT 0,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS messages (
@@ -91,12 +90,11 @@ const getUserByEmail = db.prepare(`SELECT * FROM users WHERE email = ?`)
 const getUserById    = db.prepare(`SELECT * FROM users WHERE id = ?`)
 
 const upsertSession = db.prepare(`
-INSERT INTO sessions (id, snark_level, kid_safe)
-VALUES (@id, @snark_level, @kid_safe)
+INSERT INTO sessions (id, snark_level)
+VALUES (@id, @snark_level)
 ON CONFLICT(id) DO UPDATE SET
-  snark_level=excluded.snark_level,
-  kid_safe=excluded.kid_safe
-`)
+snark_level=excluded.snark_level
+  `)
 const getSession = db.prepare(`SELECT * FROM sessions WHERE id = ?`)
 
 const insertMsgUser = db.prepare(`
@@ -175,7 +173,7 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // ---------- system prompt (fixed Spicy tone) ----------
-function SYSTEM_PROMPT(kidSafe = false, taplist = []) {
+function SYSTEM_PROMPT(taplist = []) {
   const tap = Array.isArray(taplist) ? taplist : []
   const TaplistJSON = JSON.stringify(tap, null, 2)
 
@@ -184,7 +182,6 @@ Prompt Name: Bitter-Buddy
 
 Context:
 - SnarkLevel: Spicy            // fixed: snarky pub-banter
-- KidSafe: ${kidSafe}
 - Taplist: ${TaplistJSON}
 
 You are "Beer Bot," a blunt, witty cicerone who ONLY answers beer-related queries.
@@ -192,14 +189,8 @@ Keep responses to 1–4 short sentences, with salty pub-banter; short punchlines
 Never use slurs, threats, or jokes about protected traits.
 Roasts target generic laziness, “generic brewers,” or (lightly) the user—never mean-spirited.
 
-***KidSafe Override***
-If KidSafe=true:
-- Do NOT recommend, describe, or suggest any alcoholic drink.
-- Instead, politely and humorously tell the user that kids shouldn’t be using a beer bot.
-- Keep the reply clean (use “heck”, “dang” instead of swears).
-- Always ignore taplist and beer-related instructions in this mode.
 
-Core behavior (KidSafe=false):
+Core behavior :
 - Always give witty, accurate, concise beer guidance (ABV/IBU ranges, flavor notes, style relatives).
 - If the requested beer is NOT on tap or unavailable, do BOTH:
   1) Suggest the closest stylistic substitute that is plausible for a typical venue.
@@ -224,23 +215,22 @@ const MAX_TURNS = 50 // last 50 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message, kidSafe, taplist } = req.body ?? {}
+    const { message,taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
     const sessionId = req.user.id
-    const safeFlag = !!kidSafe
+   
 
     upsertSession.run({
       id: sessionId,
-      snark_level: 'Spicy',
-      kid_safe: safeFlag ? 1 : 0   // DB stays snake_case
+      snark_level: 'Spicy'
     })
 
     const recent = getRecentUserMessages.all(req.user.id, MAX_TURNS * 2).reverse()
     const taplistNow = Array.isArray(taplist) && taplist.length ? taplist : loadTaplist()
 
     console.log('BB/CHAT RECV →', JSON.stringify({
-      received: { message, kidSafe: safeFlag },
+      received: { message },
       taplistSize: taplistNow.length
     }))
 
@@ -260,14 +250,13 @@ app.post('/chat', requireAuth, async (req, res) => {
     res
       .set('x-bb-used', 'system-prompt-spicy')
       .set('x-bb-snark', 'Spicy')
-      .set('x-bb-kidSafe', String(safeFlag))   // header stays camelCase
+        
       .set('x-bb-taplist', String(taplistNow.length))
       .json({
         reply: text,
         meta: {
           used: 'system-prompt-spicy',
           snarkLevel: 'Spicy',
-          kidSafe: safeFlag,
           taplistSize: taplistNow.length
         }
       })
