@@ -186,9 +186,9 @@ app.get('/me', requireAuth, (req, res) => {
 })
 
 // ---------- local fallback prompt (used only if Prompt-ID call fails) ----------
-function SYSTEM_PROMPT(snark, kidsafe = false, taplist = []) {
+function SYSTEM_PROMPT(snark, kidSafe = false, taplist = []) {
   const snarklevel = normalizeSnark(snark)
-  const KidSafe = !!kidsafe
+  const KidSafe = !!kidSafe
   const tap = Array.isArray(taplist) ? taplist : []
   const TaplistJSON = JSON.stringify(tap, null, 2)
 
@@ -221,12 +221,12 @@ const MAX_TURNS = 100 // last 100 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message, snarklevel, kidsafe, taplist } = req.body ?? {}
+    const { message, snarklevel, kidSafe, taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
     // normalize / persist session prefs
     const snark = normalizeSnark(snarklevel ?? 'Mild')
-    const ksafe = !!kidsafe
+    const ksafe = !!kidSafe
     const sessionId = req.user.id
     upsertSession.run({ id: sessionId, snark_level: snark, kid_safe: ksafe ? 1 : 0 })
 
@@ -239,8 +239,8 @@ app.post('/chat', requireAuth, async (req, res) => {
 
     // server-side debug
     const dbg = {
-      received: { message, snarklevel, kidsafe },
-      normalized: { snark, kidsafe: ksafe },
+      received: { message, snarklevel, kidSafe },
+      normalized: { snark, kidSafe: ksafe },
       taplistSize: taplistNow.length,
     }
     console.log('BB/CHAT RECV →', JSON.stringify(dbg))
@@ -264,7 +264,7 @@ app.post('/chat', requireAuth, async (req, res) => {
         input: messages,
         variables: {
           snarklevel: snark,
-          kidsafe: ksafe,
+          kidSafe: ksafe,
           taplist: JSON.stringify(taplistNow)
         }
       })
@@ -291,9 +291,9 @@ app.post('/chat', requireAuth, async (req, res) => {
     res
       .set('x-bb-used', usedPath)
       .set('x-bb-snark', snark)
-      .set('x-bb-kidsafe', String(ksafe))
+      .set('x-bb-kidSafe', String(ksafe))
       .set('x-bb-taplist', String(taplistNow.length))
-      .json({ reply: text, meta: { used: usedPath, snarklevel: snark, kidsafe: ksafe, taplistSize: taplistNow.length } })
+      .json({ reply: text, meta: { used: usedPath, snarklevel: snark, kidSafe: ksafe, taplistSize: taplistNow.length } })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
