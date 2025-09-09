@@ -236,54 +236,70 @@ app.post('/chat', requireAuth, async (req, res) => {
 
     // taplist (client override preferred)
     const taplistNow = Array.isArray(taplist) && taplist.length ? taplist : loadTaplist()
-    console.log('BB RECV BODY ←', JSON.stringify({ message, snarkLevel, kidSafe }))
-    console.log(`BB NORMALIZED ← { snark: '${snark}', kidSafe: ${ksafe} }`)
-    console.log(`BB TAPLIST size=${taplistNow.length} source=${Array.isArray(taplist) && taplist.length ? 'client' : 'server'}`)
+
+    // server-side debug
+    const dbg = {
+      received: { message, snarkLevel, kidSafe },
+      normalized: { snark, kidSafe: ksafe },
+      taplistSize: taplistNow.length,
+    }
+    console.log('BB/CHAT RECV →', JSON.stringify(dbg))
 
     // save user message
     insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
 
-    // Build messages: we still pass history/user content;
-    // the *instructions* come from your stored prompt via PROMPT_ID + variables.
+    // Build messages for conversation
     const messages = [
       ...recent,
       { role: 'user', content: String(message) }
     ]
 
-    let text
+    let text, usedPath
+
     try {
-      // Preferred path: use your stored prompt by ID with variables
+      // Preferred: stored prompt by ID with variables
       const resp = await client.responses.create({
         model: 'gpt-5',
-        prompt: PROMPT_ID,                 // 👈 use your OpenAI Prompt ID
-        input: messages,                   // conversation/history + current user message
-        variables: {                       // 👈 injected into your stored prompt
+        prompt: PROMPT_ID,
+        input: messages,
+        variables: {
           snarkLevel: snark,
           kidSafe: ksafe,
           taplist: JSON.stringify(taplistNow)
         }
       })
       text = resp.output_text ?? '(no reply)'
-      console.log('BB PromptID OK')
+      usedPath = 'prompt-id'
+      console.log('BB/CHAT USED → prompt-id')
     } catch (e) {
-      console.error('BB PromptID failed, falling back to SYSTEM_PROMPT →', e?.message || e)
-      // Fallback: send local system prompt explicitly
+      // Fallback to local system prompt
+      console.error('BB/CHAT prompt-id failed →', e?.message || e)
       const input = [
         { role: 'system', content: SYSTEM_PROMPT(snark, ksafe, taplistNow) },
         ...messages
       ]
       const resp2 = await client.responses.create({ model: 'gpt-5', input })
       text = resp2.output_text ?? '(no reply)'
+      usedPath = 'fallback-system'
+      console.log('BB/CHAT USED → fallback-system')
     }
 
     // save assistant reply
     insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
-    res.json({ reply: text })
+
+    // Include meta in headers + JSON so you can see it in Android Logcat
+    res
+      .set('x-bb-used', usedPath)
+      .set('x-bb-snark', snark)
+      .set('x-bb-kidsafe', String(ksafe))
+      .set('x-bb-taplist', String(taplistNow.length))
+      .json({ reply: text, meta: { used: usedPath, snarkLevel: snark, kidSafe: ksafe, taplistSize: taplistNow.length } })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
+
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
