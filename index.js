@@ -176,16 +176,15 @@ app.get('/me', requireAuth, (req, res) => {
 
 // ---------- system prompt (fixed Spicy tone) ----------
 function SYSTEM_PROMPT(kidSafe = false, taplist = []) {
-  const kidSafe = !!kidSafe
   const tap = Array.isArray(taplist) ? taplist : []
   const TaplistJSON = JSON.stringify(tap, null, 2)
 
-  return `
+return `
 Prompt Name: Bitter-Buddy
 
 Context:
 - SnarkLevel: Spicy            // fixed: snarky pub-banter
-- kidSafe: ${kidSafe}
+- KidSafe: ${kidSafe}
 - Taplist: ${TaplistJSON}
 
 You are "Beer Bot," a blunt, witty cicerone who ONLY answers beer-related queries.
@@ -193,14 +192,14 @@ Keep responses to 1–4 short sentences, with salty pub-banter; short punchlines
 Never use slurs, threats, or jokes about protected traits.
 Roasts target generic laziness, “generic brewers,” or (lightly) the user—never mean-spirited.
 
-***kidSafe Override***
-If kidSafe=true:
+***KidSafe Override***
+If KidSafe=true:
 - Do NOT recommend, describe, or suggest any alcoholic drink.
 - Instead, politely and humorously tell the user that kids shouldn’t be using a beer bot.
 - Keep the reply clean (use “heck”, “dang” instead of swears).
 - Always ignore taplist and beer-related instructions in this mode.
 
-Core behavior (kidSafe=false):
+Core behavior (KidSafe=false):
 - Always give witty, accurate, concise beer guidance (ABV/IBU ranges, flavor notes, style relatives).
 - If the requested beer is NOT on tap or unavailable, do BOTH:
   1) Suggest the closest stylistic substitute that is plausible for a typical venue.
@@ -215,9 +214,10 @@ When recommending:
 Formatting:
 - Strictly no bullets unless the user asks.
 - Replies must be one tight paragraph (1–4 sentences).
-- If kidSafe=true, always return the override response only.
+- If KidSafe=true, always return the override response only.
 `.trim()
 }
+
 
 // ---------- chat route ----------
 const MAX_TURNS = 50 // last 50 user+assistant turns
@@ -227,55 +227,56 @@ app.post('/chat', requireAuth, async (req, res) => {
     const { message, kidSafe, taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
-    // persist session prefs (snark fixed to Spicy)
     const sessionId = req.user.id
-    const ksafe = !!kidSafe
-    upsertSession.run({ id: sessionId, snark_level: 'Spicy', kid_safe: ksafe ? 1 : 0 })
+    const safeFlag = !!kidSafe
 
-    // recent history
-    const need = MAX_TURNS * 2
-    const recent = getRecentUserMessages.all(req.user.id, need).reverse()
+    upsertSession.run({
+      id: sessionId,
+      snark_level: 'Spicy',
+      kid_safe: safeFlag ? 1 : 0   // DB stays snake_case
+    })
 
-    // taplist (client override preferred)
+    const recent = getRecentUserMessages.all(req.user.id, MAX_TURNS * 2).reverse()
     const taplistNow = Array.isArray(taplist) && taplist.length ? taplist : loadTaplist()
 
-    // debug
     console.log('BB/CHAT RECV →', JSON.stringify({
-      received: { message, kidSafe: ksafe },
+      received: { message, kidSafe: safeFlag },
       taplistSize: taplistNow.length
     }))
 
-    // save user message
     insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
 
-    // Build messages (system prompt + history + user)
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(ksafe, taplistNow) },
+      { role: 'system', content: SYSTEM_PROMPT(safeFlag, taplistNow) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
 
-    // OpenAI call (no Prompt-ID)
-    const response = await client.responses.create({
-      model: 'gpt-4.1-mini',
-      input
-    })
+    const response = await client.responses.create({ model: 'gpt-4.1-mini', input })
     const text = response.output_text ?? '(no reply)'
 
-    // save assistant reply
     insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
 
     res
       .set('x-bb-used', 'system-prompt-spicy')
       .set('x-bb-snark', 'Spicy')
-      .set('x-bb-kidSafe', String(ksafe))
+      .set('x-bb-kidSafe', String(safeFlag))   // header stays camelCase
       .set('x-bb-taplist', String(taplistNow.length))
-      .json({ reply: text, meta: { used: 'system-prompt-spicy', snarkLevel: 'Spicy', kidSafe: ksafe, taplistSize: taplistNow.length } })
+      .json({
+        reply: text,
+        meta: {
+          used: 'system-prompt-spicy',
+          snarkLevel: 'Spicy',
+          kidSafe: safeFlag,
+          taplistSize: taplistNow.length
+        }
+      })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
+
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
