@@ -211,22 +211,28 @@ Formatting:
 
 
 // ---------- chat route ----------
-const MAX_TURNS = 50 // last 50 user+assistant turns
+
+const MAX_TURNS = 50; // last 50 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
   try {
-    const { message,taplist } = req.body ?? {}
+    const { message, taplist } = req.body ?? {}
     if (!message) return res.status(400).json({ error: 'message required' })
 
     const sessionId = req.user.id
-   
 
+    // Persist session prefs (snark fixed to Spicy)
     upsertSession.run({
       id: sessionId,
-      snark_level: 'Spicy'
+      snark_level: 'Spicy',
+      kid_safe: 0   // always 0, unused
     })
 
-    const recent = getRecentUserMessages.all(req.user.id, MAX_TURNS * 2).reverse()
+    // Recent history
+    const need = MAX_TURNS * 2
+    const recent = getRecentUserMessages.all(req.user.id, need).reverse()
+
+    // Taplist (client override preferred)
     const taplistNow = Array.isArray(taplist) && taplist.length ? taplist : loadTaplist()
 
     console.log('BB/CHAT RECV →', JSON.stringify({
@@ -234,23 +240,29 @@ app.post('/chat', requireAuth, async (req, res) => {
       taplistSize: taplistNow.length
     }))
 
+    // Save user message
     insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
 
+    // Build prompt + messages
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(safeFlag, taplistNow) },
+      { role: 'system', content: SYSTEM_PROMPT(false, taplistNow) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
 
-    const response = await client.responses.create({ model: 'gpt-4.1-mini', input })
+    // OpenAI call
+    const response = await client.responses.create({
+      model: 'gpt-4.1-mini',
+      input
+    })
     const text = response.output_text ?? '(no reply)'
 
+    // Save assistant reply
     insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
 
     res
       .set('x-bb-used', 'system-prompt-spicy')
       .set('x-bb-snark', 'Spicy')
-        
       .set('x-bb-taplist', String(taplistNow.length))
       .json({
         reply: text,
@@ -265,6 +277,7 @@ app.post('/chat', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
+
 
 
 // ---------- history & reset ----------
