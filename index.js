@@ -10,6 +10,7 @@ import fs from 'fs'
 import crypto from 'crypto'
 import bcrypt from 'bcryptjs'
 import cookieParser from 'cookie-parser'
+import jwt from 'jsonwebtoken'
 
 // ---------- setup paths ----------
 const __filename = fileURLToPath(import.meta.url)
@@ -81,6 +82,7 @@ try { db.exec(`ALTER TABLE messages ADD COLUMN user_id TEXT`); } catch {}
 
 // ---------- helpers ----------
 const rid = (n = 16) => crypto.randomBytes(n).toString('hex')
+const JWT_SECRET = process.env.JWT_SECRET || "super-secret-fallback"
 
 // ---------- SQL prepared statements ----------
 const insertUser = db.prepare(`
@@ -106,6 +108,20 @@ const getRecentUserMessages = db.prepare(`
 
 // ---------- auth middleware ----------
 function requireAuth(req, res, next) {
+  // Check Authorization header first
+  const authHeader = req.headers.authorization
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1]
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET)
+      req.user = { id: decoded.id, email: decoded.email }
+      return next()
+    } catch (err) {
+      return res.status(401).json({ error: "invalid_token" })
+    }
+  }
+
+  // Fallback to cookie
   const uid = req.signedCookies?.uid
   if (!uid) return res.status(401).json({ error: 'unauthenticated' })
   const user = getUserById.get(uid)
@@ -134,7 +150,10 @@ app.post('/auth/register', (req, res) => {
       signed: !!process.env.AUTH_SECRET,
       maxAge: 1000 * 60 * 60 * 24 * 30
     })
-    res.json({ ok: true, user: { id, email: String(email).toLowerCase() } })
+
+    const token = jwt.sign({ id, email: String(email).toLowerCase() }, JWT_SECRET, { expiresIn: "7d" })
+
+    res.json({ ok: true, user: { id, email: String(email).toLowerCase() }, token })
   } catch (err) {
     console.error('register error:', err)
     res.status(500).json({ error: 'register_failed', detail: String(err.message || err) })
@@ -156,7 +175,10 @@ app.post('/auth/login', (req, res) => {
       signed: !!process.env.AUTH_SECRET,
       maxAge: 1000 * 60 * 60 * 24 * 30
     })
-    res.json({ ok: true, user: { id: user.id, email: user.email } })
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "7d" })
+
+    res.json({ ok: true, user: { id: user.id, email: user.email }, token })
   } catch (err) {
     console.error('login error:', err)
     res.status(500).json({ error: 'login_failed', detail: String(err.message || err) })
@@ -198,7 +220,6 @@ Never use slurs, threats, or jokes about protected traits.
 Roasts target generic laziness, “generic brewers,” or (lightly) the user—never mean-spirited.
  
 
-
 Core behavior :
 - Always give witty, accurate, concise beer guidance (ABV/IBU ranges, flavor notes, style relatives).
 - If the requested beer is NOT on tap or unavailable, do BOTH:
@@ -218,9 +239,7 @@ Formatting:
 `.trim()
 }
 
-
 // ---------- chat route ----------
-
 const MAX_TURNS = 50; // last 50 user+assistant turns
 
 app.post('/chat', requireAuth, async (req, res) => {
@@ -254,7 +273,7 @@ app.post('/chat', requireAuth, async (req, res) => {
 
     // Build prompt + messages
     const input = [
-      { role: 'system', content: SYSTEM_PROMPT(false, taplistNow) },
+      { role: 'system', content: SYSTEM_PROMPT(taplistNow) },
       ...recent,
       { role: 'user', content: String(message) }
     ]
@@ -286,8 +305,6 @@ app.post('/chat', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
   }
 })
-
-
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
