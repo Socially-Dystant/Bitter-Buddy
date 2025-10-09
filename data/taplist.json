@@ -477,12 +477,6 @@
   },
   {
     "brewery": "Moksa",
-    "name": "Yakima Trinity",
-    "style": "West coast pale ale w citra, Simcoe & mosaic",
-    "abv": "5.6% ABV"
-  },
-  {
-    "brewery": "Moksa",
     "name": "Liminal Traces",
     "style": "Hazy IPA wcitra, nelson, motueka cryo, and galaxy",
     "abv": "7% ABV"
@@ -504,6 +498,13 @@
     "name": "Freshie Freeze",
     "style": "Hazy IPA w Citra Cryofresh",
     "abv": "6.8% ABV"
+  },
+  {
+    "brewery": "Moksa",
+    "name": "Perfect Time",
+    "style": "West Coast IPA",
+    "description": "Mosaic, Mosaic Cryo, Citra, nelson cryo, crush & strata hops",
+    "abv": "7% ABV"
   },
   {
     "brewery": "Moksa",
