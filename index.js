@@ -281,26 +281,53 @@ app.post("/chat", requireAuth, async (req, res) => {
 
     // Support both old and new payload formats
     let finalPrompt = "";
+    let lastUserMessage = "";
+
     if (Array.isArray(messages) && messages.length > 0) {
-      // 🧠 Combine messages into one conversation prompt
+      // Combine messages into a multi-turn string
       finalPrompt = messages.map(m => `${m.role}: ${m.content}`).join("\n");
+      const lastUserMsg = messages.findLast(m => m.role === "user");
+      lastUserMessage = lastUserMsg?.content || "";
     } else if (typeof message === "string") {
       finalPrompt = message;
+      lastUserMessage = message;
     } else {
       return res.status(400).json({ error: "Missing message or messages array" });
     }
 
-    // Save only the last user message for history (optional)
-    const lastUserMsg = Array.isArray(messages)
-      ? messages.findLast(m => m.role === "user")
-      : { content: message };
+    // 🔎 Detect intent to get nearby brewery or beers
+    const intent = lastUserMessage.toLowerCase();
+    if (intent.includes("near") || intent.includes("closest") || intent.includes("around here")) {
+      const taplist = loadTaplist();
 
-    if (lastUserMsg?.content) {
-      insertMsgUser.run(req.user.id, req.user.id, "user", String(lastUserMsg.content));
+      // Example: find the brewery whose name appears in the last message or is closest match
+      const foundBrewery = taplist.find(b =>
+        intent.includes(b.brewery.toLowerCase())
+      );
+
+      if (foundBrewery) {
+        return res.json({
+          ok: true,
+          reply: `If you're near ${foundBrewery.brewery}, try "${foundBrewery.name}" — a ${foundBrewery.style || "beer"} (${foundBrewery.abv || "N/A"}).`
+        });
+      } else {
+        // fallback suggestion
+        const randomBeer = taplist[Math.floor(Math.random() * taplist.length)];
+        return res.json({
+          ok: true,
+          reply: `Nothing nearby matched. But you might like "${randomBeer.name}" from ${randomBeer.brewery}.`
+        });
+      }
     }
 
-    // Call your model
-    const reply = await chatWithModel(finalPrompt);
+    // Save user message
+    insertMsgUser.run(req.user.id, req.user.id, "user", String(lastUserMessage));
+
+    // Call OpenAI
+    const reply = await chatWithModel(Array.isArray(messages)
+      ? messages
+      : [{ role: "user", content: finalPrompt }]
+    );
 
     // Save assistant reply
     insertMsgUser.run(req.user.id, req.user.id, "assistant", reply);
@@ -311,6 +338,7 @@ app.post("/chat", requireAuth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 })
+
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
