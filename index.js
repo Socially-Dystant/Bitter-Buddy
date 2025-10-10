@@ -242,69 +242,73 @@ Formatting:
 }
 
 // ---------- chat route ----------
+async function chatWithModel(input) {
+  const taplist = loadTaplist();
+  const systemPrompt = SYSTEM_PROMPT(taplist);
+
+  // Handle both string and message-array input
+  let chatMessages = [];
+
+  if (Array.isArray(input)) {
+    // Already an array of {role, content}
+    chatMessages = input;
+  } else if (typeof input === "string") {
+    // Legacy: single user message
+    chatMessages = [{ role: "user", content: input }];
+  } else {
+    throw new Error("Invalid input type to chatWithModel");
+  }
+
+  console.log("🧠 chatWithModel input:", JSON.stringify(chatMessages, null, 2));
+
+  const completion = await client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: systemPrompt },
+      ...chatMessages
+    ],
+  });
+
+  const reply = completion.choices?.[0]?.message?.content?.trim() || "";
+  return reply;
+}
+
 const MAX_TURNS = 50; // last 50 user+assistant turns
 
-app.post('/chat', requireAuth, async (req, res) => {
+app.post("/chat", requireAuth, async (req, res) => {
   try {
-    const { message, taplist } = req.body ?? {}
-    if (!message) return res.status(400).json({ error: 'message required' })
+    const { message, messages } = req.body;
 
-    const sessionId = req.user.id
+    // Support both old and new payload formats
+    let finalPrompt = "";
+    if (Array.isArray(messages) && messages.length > 0) {
+      // 🧠 Combine messages into one conversation prompt
+      finalPrompt = messages.map(m => `${m.role}: ${m.content}`).join("\n");
+    } else if (typeof message === "string") {
+      finalPrompt = message;
+    } else {
+      return res.status(400).json({ error: "Missing message or messages array" });
+    }
 
-    // Persist session prefs (snark fixed to Spicy)
-    upsertSession.run({
-      id: sessionId,
-      snark_level: 'Spicy',
-      kid_safe: 0   // always 0, unused
-    })
+    // Save only the last user message for history (optional)
+    const lastUserMsg = Array.isArray(messages)
+      ? messages.findLast(m => m.role === "user")
+      : { content: message };
 
-    // Recent history
-    const need = MAX_TURNS * 2
-    const recent = getRecentUserMessages.all(req.user.id, need).reverse()
+    if (lastUserMsg?.content) {
+      insertMsgUser.run(req.user.id, req.user.id, "user", String(lastUserMsg.content));
+    }
 
-    // Taplist (client override preferred)
-    const taplistNow = Array.isArray(taplist) && taplist.length ? taplist : loadTaplist()
-
-    console.log('BB/CHAT RECV →', JSON.stringify({
-      received: { message },
-      taplistSize: taplistNow.length
-    }))
-
-    // Save user message
-    insertMsgUser.run(req.user.id, sessionId, 'user', String(message))
-
-    // Build prompt + messages
-    const input = [
-      { role: 'system', content: SYSTEM_PROMPT(taplistNow) },
-      ...recent,
-      { role: 'user', content: String(message) }
-    ]
-
-    // OpenAI call
-    const response = await client.responses.create({
-      model: 'gpt-4.1-mini',
-      input
-    })
-    const text = response.output_text ?? '(no reply)'
+    // Call your model
+    const reply = await chatWithModel(finalPrompt);
 
     // Save assistant reply
-    insertMsgUser.run(req.user.id, sessionId, 'assistant', text)
+    insertMsgUser.run(req.user.id, req.user.id, "assistant", reply);
 
-    res
-      .set('x-bb-used', 'system-prompt-spicy')
-      .set('x-bb-snark', 'Spicy')
-      .set('x-bb-taplist', String(taplistNow.length))
-      .json({
-        reply: text,
-        meta: {
-          used: 'system-prompt-spicy',
-          snarkLevel: 'Spicy',
-          taplistSize: taplistNow.length
-        }
-      })
+    res.json({ ok: true, reply });
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: 'server_error', detail: String(err.message || err) })
+    console.error("❌ Chat error:", err);
+    res.status(500).json({ error: err.message });
   }
 })
 
