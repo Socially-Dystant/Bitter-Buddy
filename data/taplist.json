@@ -163,8 +163,8 @@
     "brewery": "Moonraker",
     "name": "Blue Chronic",
     "style": "Wc Ipa",
-    "abv": "7.5%",
-    "description": "Hops Mosaic",
+    "abv": "7%",
+    "description": "Fresh Hops Centennial Hops Mosaic",
     "url": ""
   },
   {
@@ -957,6 +957,174 @@
     "style": "Belgian Style White",
     "abv": "4.7%",
     "description": "Belgian Style White",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Hammock Time",
+    "style": "Blonde Ale",
+    "abv": "5.1%",
+    "description": "It’s summer, and that means it's Hammock Time. This Blonde Ale recalls flavors of fresh apricots, honey, and a hint of hoppiness bundled in a refreshing light ale. Perfect for those days when all you want to do is find the nearest hammock, kick off the flip flops, and chill out in the shade.",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "1-2 Punch",
+    "style": "Peach And Mango Hazy Ipa",
+    "abv": "N/A",
+    "description": "This beer packs a hell of a punch! Of fruit that is...1-2 Punch is a hazy IPA that checks all the boxes- dynamite hops flavor from Citra, Amarillo and Mosaic, paired with Peach and Mango to punch up your palate. Crooked Lane's customer favorite!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Mandarin Pale Ale",
+    "style": "American Pale Ale With Fresh Mandarin Juice",
+    "abv": "6.1%",
+    "description": "Mandarin Pale Ale features fresh-squeezed juice from Colwell Thundering Herd Mandarin Ranch. It’s crisp and satisfying with a delightful citrus aroma and dry finish. Mandarin season may only come once each year, but now you can raise a glass and celebrate year round!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Discover The Unicorn",
+    "style": "West Coast Ipa",
+    "abv": "7%",
+    "description": "Our love of West Coast IPA runs deep- this IPA checks all the boxes. Clear, crisp and balanced bitterness, on point with layered notes of ripe mango, melon, grapefruit and just the right amount of dank.",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "SR-16",
+    "style": "West Coast Double Ipa",
+    "abv": "8.5%",
+    "description": "SR 16 inspires with a sense of IPA adventure. A double that drinks like a single, you won’t believe the burst of Citra and Amarillo hops that resides within. One taste and you’re hooked – you’ve been warned.",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Women Of Iron",
+    "style": "West Coat Ipa",
+    "abv": "7%",
+    "description": "Crooked Lane and Iron Rose FC are a badass matchup! In honor of our new partnership, we crafted this West Coast IPA with a unique blend of Chinook, Cashmere, Idaho 7 and Riwaka for a big melon and spicy nose, backed up with powerful grapefruit hop character. We are bringing this IPA to our core lineup, so we can celebrate Women of Iron all year long!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Mic Czech",
+    "style": "Czech-Style Pilsner",
+    "abv": "5%",
+    "description": "Brewed with the fine folks at Infusion Taproom in Lincoln, CA for their 10th Anniversary, this delicious Czech-style Pilsner is a variation of our last Czech Pils, Zephyr Ridge. With the same yummy citrus and floral Saaz hops we added an addition of Tettnang hops. Which offers aromas of herbal, woodsy spiciness",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Camp Pendleton Pils",
+    "style": "West Coast Pilsner",
+    "abv": "5%",
+    "description": "This beer is brewed in memory of Officer Cameron Landon, who was a police officer, Marine and father. It will help benefit law enforcement officers, first responders and veterans that suffer from Post Traumatic Stress (PTS). We used the Mic Czech as the base beer for this West Coast Pils, we dry hopped the hell out of this highly drinkable, extremely aromatic beer with Nelson, Nectaron, and Citra. This combination of southern hemisphere hops creates undeniably delicious aromas and flavors of mango, lychee, and pineapple.",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Veedles Brau",
+    "style": "Kolsch Style",
+    "abv": "5.3%",
+    "description": "There’s nothing quite like a good Kölsch. Subtle fruit character, noble German hops, light malt backbone, and crisp finish make our Kölsch-style ale exquisitely refreshing. Veedels are districts within the city of Köln, and and Veedels Bräu we transport you there for biergarten bliss.",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Wobblor",
+    "style": "Dopplebock",
+    "abv": "8.6%",
+    "description": "German lager of the richest, most decadent character, Doppelbock was originally liquid bread, brewed to sustain the faithful while fasting. Now you can enjoy it without the hardship! Wobblor’s caramel, toffee, and rich malty flavors delight the senses and fortify against evil and adversity.",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Oktoberfest",
+    "style": "Amber Lager",
+    "abv": "5.2%",
+    "description": "We do traditional styles korrekt! It’s all German ingredients that go into this delicious amber lager, with complex malt flavor and aroma, brilliant color, and a crisp, dry finish. Time to grab your stein, your dirdnl, your lederhosen, and get your schunkeln on! Oans, zwoa, drei, g’suffa!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Mortal Wombat",
+    "style": "West Coast Double Ipa",
+    "abv": "8%",
+    "description": "Choose Your Destiny . . . with our latest West Coast Double IPA, Mortal Wombat. The trio of Nelson, Nectaron and Motueka attacks your palate with a Flawless Victory!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Steely Dano West Coast IPA",
+    "style": "",
+    "abv": "6.5%",
+    "description": "Dano, one of our beloved brewers, is a BIG-HEARTED teddy bear, famous for naming many of our brewery features and experiences. To honor him and his wife’s propensity to foster stray kittens aka The Sh**ty Kitty Rescue Steely Dano was created, a west coast IPA built to Dano’s strict specifications; crisp, dry and pale with Cryo BRU-1, Idaho 7, and Rakau. It puts the pine in pineapple!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Survivors & Heroes West Coast IPA",
+    "style": "",
+    "abv": "7%",
+    "description": "Survivors and Heroes is a classic and sturdily built west coast IPA, with a retro malt backbone and forward looking Anchovy and Elani Cryo hops, delivering a fresh pop of pine and citrus. Anchovy, a new small batch hop, delivers a one-of-a-kind flavor featuring raspberry and pine, while Elani features stone fruit and orange zest- needless to say, this flavor combo is uniquely refreshing!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Blood Simple Hefeweisen with Blood Orange",
+    "style": "",
+    "abv": "N/A",
+    "description": "Blood Simple is the Radler reinvented... starting with a traditional German-style Hefeweizen, we infused a decadent dose of blood orange, resulting a supremely satisfying and refreshing beer with a hue that reminds you of that sunrise after you got away with something glorious!",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Bowman Brown Ale",
+    "style": "",
+    "abv": "N/A",
+    "description": "A robust american brown ale featuring Columbus, Chinook and Willamette hops.  Generous amounts of british crystal and chocolate malts import notes of caramel, toffee and chocolate. A crushable, smooth and dark yet dry ale, a notch below a porter",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Pineapple, Passionfruit & Guava-",
+    "style": "",
+    "abv": "6%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Pomegranate, Raspberry & Orange",
+    "style": "",
+    "abv": "6%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Blackberry & Lime",
+    "style": "",
+    "abv": "6%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Cranberry, Peach, Passionfruit & Hibiscus Kettle Sour",
+    "style": "",
+    "abv": "5.5%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Crooked Lane",
+    "name": "Dark Bent",
+    "style": "Dry Irish Stout",
+    "abv": "5.3%",
+    "description": "This dark stout done in the style of the world's most popular stout will not let you down. Rich in flaver yet dry and drinkable, It's our love letter to fans of dark, malty beers with notes of chocolate,  coffee and light roasted malt flavors. If you've got a thing for the dark side you'll love Dark Bent.",
     "url": ""
   }
 ]
