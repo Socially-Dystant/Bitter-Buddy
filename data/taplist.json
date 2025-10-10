@@ -1,703 +1,962 @@
 [
   {
     "brewery": "Shred",
-    "name": "Daily Grind - Coffee Porter 7% ABV",
+    "name": "Daily Grind",
+    "style": "Coffee Porter",
+    "abv": "7%",
     "description": "Cold conditioned on a hefty dose of ColombiaDulima Excelso from our friends at Valiant Coffee Roasters. Served on nitro for maximum creamy goodness.",
     "url": "https://shredbeercompany.com/menu/daily-grind-coffee-porter-7-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Cold Grind - American Lager 4.5% ABV",
+    "name": "Cold Grind",
+    "style": "American Lager",
+    "abv": "4.5%",
     "description": "Clean. Crisp. Uncompromising.\r\n\r\nCold Grind is a no-nonsense premium lager brewed for those who respect the grind. Crafted with precision and patience, it pours a brilliant golden hue with a frothy white head. Expect a light, bready malt backbone balanced by a subtle hop bitterness and a refreshingly dry finish. Cold-fermented and conditioned for extra smoothness, its the perfect beer for unwinding after a hard dayor gearing up for the next challenge.",
     "url": "https://shredbeercompany.com/menu/cold-grind-american-lager-4-5-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Velvet Funeral - Barrel-Aged Stout 16.1% ABV",
+    "name": "Velvet Funeral - Barrel",
+    "style": "Aged Stout",
+    "abv": "16.1%",
     "description": "Aged gracefully for 18 months in a combination of Blanton's and Buffalo Trace barrels.",
     "url": "https://shredbeercompany.com/menu/velvet-funeral-barrel-aged-stout-16-1-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Micro Blaster - Session IPA 5% ABV",
+    "name": "Micro Blaster",
+    "style": "Session Ipa",
+    "abv": "5%",
     "description": "Blurring the lines of Session IPA and Pale Ale, this absolute hop crusher gets blasted with powerful charges of Nelson, Mosaic, and Simcoe. Punchy notes of blueberry forest, rock fruit, and southern hemi diesel.\r\n\r\n2025 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2024 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2023 GABF - Bronze Medal - Session India Pale Ale",
     "url": "https://shredbeercompany.com/menu/micro-blaster-session-ipa-5-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Cosmic Swirl - Hazy IPA 7.2% ABV",
+    "name": "Cosmic Swirl",
+    "style": "Hazy Ipa",
+    "abv": "7.2%",
     "description": "Embark on a galactic journey with Cosmic Swirl, a bold and vibrant hazy IPA. Bursting with the interstellar flavors of Citra and Nectaron hops, this beer delivers a lush swirl of juicy citrus, tropical fruit, and cosmic haze. At 7.2% ABV, its a celestial experiencesoft, smooth, and packed with flavorperfect for when youre ready to get lost in the stars",
     "url": "https://shredbeercompany.com/menu/cosmic-swirl-hazy-ipa-7-2-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Zero Degrees - Cold IPA 6.5% ABV",
+    "name": "Zero Degrees",
+    "style": "Cold Ipa",
+    "abv": "6.5%",
     "description": "100% Mosaic and Mosaic Cryo hops bring you vibrant flavors and aromas of blueberry fields, mango flesh, and top shelf herb.\r\n\r\n2024 GABF - Silver Medal - American-Style Strong Pale Ale\r\n\r\n2023 GABF - Bronze Medal - India Pale Lager or Cold India Pale Ale",
     "url": "https://shredbeercompany.com/menu/zero-degrees-cold-ipa-6-5-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Shred IPA - West Coast IPA 6.5 % ABV",
+    "name": "Shred IPA",
+    "style": "West Coast Ipa",
+    "abv": "6.5%",
     "description": "Introducing simply - Shred IPA\r\n\r\nWe carefully selected a blend of Mosaic, Citra, Simcoe, and CTZ hops to showcase intense hoppy deliciousness over a lean malt canvas. Bright tropical fruits paired with dank cannabis notes shine through on the palate for a most excellent sensory experience",
     "url": "https://shredbeercompany.com/menu/shred-ipa-west-coast-ipa-6-5-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Good Buds - West Coast IPA 7% ABV",
+    "name": "Good Buds",
+    "style": "West Coast Ipa",
+    "abv": "7%",
     "description": "Pop, pour, and pass it to your left. This West Coast IPA hits with sticky pine, bright citrus, and that dank snap of bitternessloaded with Simcoe, Apollo, Amarillo & Chinook hops.\r\n\r\nWhether youre blazing trails or just blazing, this ones for the real ones. \r\n\r\nPairs with your couch, your crew & a good sesh.",
     "url": "https://shredbeercompany.com/menu/good-buds-west-coast-ipa-7-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Hand Picked - Hazy IPA 6.5% ABV",
+    "name": "Hand Picked",
+    "style": "Hazy Ipa",
+    "abv": "6.5%",
     "description": "Bursting with hand-selected Citra, Simcoe, and El Dorado hops- this beer drips with an abundance of peach nectar, rock fruit, and honeydew flesh.",
     "url": "https://shredbeercompany.com/menu/hand-picked-hazy-ipa-6-5-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Spent Greens - Fresh Hop IPA 6.7% ABV",
+    "name": "Spent Greens",
+    "style": "Fresh Hop Ipa",
+    "abv": "6.7%",
     "description": "Celebrate the harvest This is our annual tribute to the most exciting time of year in the world of hops.\r\n\r\nWe started with a massive dose of fresh-picked Centennial hops, rushed straight off the bines from the fine folks at Crosby Hops.\r\n\r\nWe then built upon that vibrant, green foundation with a high-stakes dry hop of Simcoe, Nelson, and Nectaron. The result is a West Coast IPA that bridges the Pacific Northwest and the Southern Hemispherea wild symphony of wet pine and lemon meringue from the fresh Centennials, layered with the dank, stone fruit of Simcoe, the diesel notes of Nelson, and the explosive tropical passion fruit of Nectaron.",
     "url": "https://shredbeercompany.com/menu/spent-greens-fresh-hop-ipa-6-7-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Murk Level Midnight - Hazy DIPA 8.5% ABV",
+    "name": "Murk Level Midnight",
+    "style": "Hazy Dipa",
+    "abv": "8.5%",
     "description": "Hazy DIPA collaboration with our pals at Pure Project Brewing.\r\n\r\nPrepare to get totally murked out from an abundance of Nelson, Strata, Citra, and Simcoe hops.\r\n\r\nTasting notes Pineapple Sorbet. Peach Rings. Fresh Herbs.",
     "url": "https://shredbeercompany.com/menu/murk-level-midnight-hazy-dipa-8-5-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Macro Blaster - West Coast DIPA 9% ABV",
+    "name": "Macro Blaster",
+    "style": "West Coast Dipa",
+    "abv": "9%",
     "description": "We took our super crushable award-winning Micro Blaster and amplified it up to another level\r\n\r\nLock and load with Macro Blaster DIPA, the ultimate hop cannon designed to blast your senses into overdrive Like the wildest water gun fight on the block, this brew comes charging with Mosaic, Mosaic Cryo, Mosaic DynaBoost, Nelson, Nelson Cryo, Simcoe, & Simcoe Cryo.\r\n\r\nSoaked and saturated with flavors and aromas of crushed gooseberries, resin sauce, and pineapple gelato.",
     "url": "https://shredbeercompany.com/menu/macro-blaster-west-coast-dipa-9-abv/"
   },
   {
     "brewery": "Shred",
-    "name": "Training Wheels - Hazy IPA 7% ABV",
+    "name": "Training Wheels",
+    "style": "Hazy Ipa",
+    "abv": "7%",
     "description": "Brewed with copious amounts oats and spelt, then hopped intensely with Citra Cryo, Citra, and Strata hops.\r\n\r\nApricot Sorbet. Dole Whip. Sativa Flowers.",
     "url": "https://shredbeercompany.com/menu/training-wheels-hazy-ipa-7-abv/"
   },
   {
     "brewery": "Shred",
+    "name": "Crypt Lord",
+    "style": "Hazy Ipa",
+    "abv": "6.9%",
+    "description": "Shrouded in haze and brewed in the shadows, Crypt Lord is a Hazy IPA that rules with an eerie intensity. Bursting with spectral waves of passion fruit, kiwi, and diesel notes from the use of 100% Nelson hops - its smooth, pillowy mouthfeel conceals a sinister hop punch that lingers beyond the grave.\r\n\r\nLow bitterness, high mystique  this is the haze that haunts.",
+    "url": "https://shredbeercompany.com/menu/crypt-lord-hazy-ipa-6-9-abv/"
+  },
+  {
+    "brewery": "Shred",
+    "name": "Cease And Deceased",
+    "style": "West Coast Ipa",
+    "abv": "6.66%",
+    "description": "Forged in the fires of oblivion and brewed with the fury of the damned, Cease and Deceased is a relentless West Coast IPA born from the unholy alliance between Shred Beer Company and the grim masters of lupulin at Ghost Town Brewing.\r\n\r\nA riff of citrus-peel bitterness, gooseberry, and sticky resin from the onslaught of Nelson Cryo, Mosaic Cryo, Riwaka, and Cascade hops tears through your senses like a chainsaw solo at midnight. The malt backbone is razor-thin just enough to keep the chaos in check before dropping off into a clean, bone-dry finish that hits harder than a double kick to the chest.\r\n\r\nClear and golden as a dying sun, this West Coast IPA is sharp, loud, and merciless. No haze. No mercy. No surrender",
+    "url": "https://shredbeercompany.com/menu/cease-and-deceased-west-coast-ipa-6-66-abv/"
+  },
+  {
+    "brewery": "Shred",
     "name": "Side Waze - Iced Tea Lemonade Hard Seltzer",
+    "style": "",
+    "abv": "N/A",
     "description": "Iced Tea Lemonade",
     "url": "https://shredbeercompany.com/menu/side-waze-iced-tea-lemonade-hard-seltzer/"
   },
   {
     "brewery": "Moonraker",
     "name": "Apple Cinnamon",
-    "description": "GF Apple, Cinnamon",
     "style": "Hard Seltzer",
-    "abv": "5%"
+    "abv": "5%",
+    "description": "GF Apple, Cinnamon",
+    "url": ""
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Blueberry Lemon",
+    "style": "Hard Seltzer",
+    "abv": "5%",
+    "description": "GF Contains Blueberry, Meyer Lemon",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Cherry Lime",
-    "description": "GF Contains Lime, Cherries",
     "style": "Hard Seltzer",
-    "abv": "5%"
+    "abv": "5%",
+    "description": "GF Contains Lime, Cherries",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "P. Y. G.",
-    "description": "GF Contains Passionfruit, Yuzu Citrus, Pink Guava",
     "style": "Hard Seltzer",
-    "abv": "5%"
+    "abv": "5%",
+    "description": "GF Contains Passionfruit, Yuzu Citrus, Pink Guava",
+    "url": ""
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Blue Chronic",
+    "style": "Wc Ipa",
+    "abv": "7.5%",
+    "description": "Hops Mosaic",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "House of 1000 Cones",
+    "style": "Wc Ipa",
+    "abv": "7.5%",
     "description": "Fresh Hops Centennial Hops Superdelic, Nectaron, Enigma, Columbus Cryo",
-    "style": "WC IPA",
-    "abv": "7.5%"
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Spinal Sap",
+    "style": "Wc Dipa",
+    "abv": "8%",
     "description": "Hops Proprietary hop blend",
-    "style": "WC DIPA",
-    "abv": "8%"
+    "url": ""
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Citrra",
+    "style": "Ne Ipa",
+    "abv": "7%",
+    "description": "Hops Citra",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Space Nectar",
+    "style": "Ne Ipa",
+    "abv": "7%",
     "description": "Hops Classified",
-    "style": "NE IPA",
-    "abv": "7%"
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Juice Nukem",
-    "description": "Hops Mosaic, Nelson, Strata, Simcoe",
-    "style": "NE DIPA",
-    "abv": "8%"
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "The Holy Hermit",
+    "style": "Ne Dipa",
+    "abv": "8.5%",
     "description": "Hops Citra, Amarillo",
-    "style": "NE DIPA",
-    "abv": "8.5%"
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Czechs the Boxes",
-    "description": "Hops Czech Saaz",
     "style": "Czech Lager",
-    "abv": "4.5%"
+    "abv": "4.5%",
+    "description": "Hops Czech Saaz",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Boho Pils",
-    "description": "Hops Czech Saaz",
     "style": "Czech Pilsner",
-    "abv": "5%"
+    "abv": "5%",
+    "description": "Hops Czech Saaz",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "El Tigre Loco",
-    "description": "Hops Grungeist, Mittelfruh",
     "style": "Mexican Style Lager",
-    "abv": "5%"
+    "abv": "5%",
+    "description": "Hops Grungeist, Mittelfruh",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "P.S. I Love You",
-    "description": "Pumpkin Spice",
     "style": "Pumpkin Spice Ale",
-    "abv": "5%"
+    "abv": "5%",
+    "description": "Pumpkin Spice",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Mrzen",
-    "description": "Hops Magnum, Select, Mittlefruh, Tettnanger",
     "style": "Mrzen",
-    "abv": "5.5%"
+    "abv": "5.5%",
+    "description": "Hops Magnum, Select, Mittlefruh, Tettnanger",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Fresh Coast Pils",
-    "description": "Hops Fresh Amarillo, Mosaic, Simcoe",
     "style": "Fresh Hop Pilsner",
-    "abv": "5.8%"
+    "abv": "5.8%",
+    "description": "Hops Fresh Amarillo, Mosaic, Simcoe",
+    "url": ""
+  },
+  {
+    "brewery": "Moonraker",
+    "name": "Festbier",
+    "style": "Oktoberfest Lager",
+    "abv": "6%",
+    "description": "Hops Mittlefruh, Sazz, Tettnanger",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Cans To Go",
-    "description": "Don't see your favorite beer to go Ask about our growler options today.\nCans and Growlers are to go only, not for on-site consumption",
     "style": "",
-    "abv": ""
+    "abv": "N/A",
+    "description": "Don't see your favorite beer to go Ask about our growler options today.\nCans and Growlers are to go only, not for on-site consumption",
+    "url": ""
   },
   {
     "brewery": "Moonraker",
     "name": "Saison Julia",
-    "description": "Limited Release Aged in Wine Barrels for 2 Years",
     "style": "Saison",
-    "abv": "6.7%"
+    "abv": "6.7%",
+    "description": "Limited Release Aged in Wine Barrels for 2 Years",
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "STORM THE GATES",
+    "style": "West Coast Pilsner",
+    "abv": "5.8%",
     "description": "WEST COAST PILSNER W MOSAIC, NECTARON, NECTARON CRYO & KRUSH CRYO",
-    "abv": "5.8% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "CHRONIC QUEST",
+    "style": "West Coast Ipa",
+    "abv": "6.9%",
     "description": "WEST COAST IPA W MOSAIC, NELSON, COLUMBUS & COLUMBUS CRYO",
-    "abv": "6.9% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "DOUGH OR DIE",
+    "style": "West Coast Ipa",
+    "abv": "7%",
     "description": "WEST COAST IPA W CITRA & TROPICAL FUSION",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "HOPPOSITE DAY",
+    "style": "",
+    "abv": "6.8%",
     "description": "DOUBLE DRY-HOPPED WEST COAST IPA W NELSON, NELSON CRYO, CITRA, COLUMBUS CRYO & SIMCOE",
-    "abv": "6.8% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "SOUL RIPPER",
+    "style": "West Coast Ipa",
+    "abv": "6.9%",
     "description": "WEST COAST IPA W MOSAIC, NECTARON & NZ CASCADE",
-    "abv": "6.9% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "THE WEST IS YET TO COME",
+    "style": "",
+    "abv": "7%",
     "description": "DOUBLE DRY-HOPPED WEST COAST IPA W MOSAIC, RIWAKA, RIWAKA CRYO & COLUMBUS CRYO",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "UNTOLD PROPHECY",
+    "style": "West Coast Ipa",
+    "abv": "6.9%",
     "description": "WEST COAST IPA W MOSAIC, MOSAIC CRYO, NECTARON & STRATA",
-    "abv": "6.9% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "REFRESHY MANGO  PEACH",
-    "description": "HOP WATER W GALAXY  MANGO & PEACH  0% ABV"
+    "style": "Hop",
+    "abv": "0%",
+    "description": "HOP WATER W GALAXY  MANGO & PEACH  0% ABV",
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "ANOTHER ONE BITES THE CRUST",
+    "style": "Hazy Ipa",
+    "abv": "7.2%",
     "description": "HAZY IPA W CITRA & KRUSH",
-    "abv": "7.2% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "BONG VOYAGE",
+    "style": "Hazy Ipa",
+    "abv": "6.9%",
     "description": "HAZY IPA W NECTARON, SIMCOE, STRATA  PINEAPPLE EXPRESS CANNABIS TERPENES",
-    "abv": "6.9% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "JUICE.EXE",
+    "style": "Hazy Ipa",
+    "abv": "7%",
     "description": "HAZY IPA W CITRA, KRUSH CRYO, MOSAIC & MOTUEKA",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "NETHER NECTAR",
+    "style": "Hazy Ipa",
+    "abv": "7%",
     "description": "HAZY IPA W GALAXY, NELSON, KRUSH CRYO & SIMCOE",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "SIPPY STARDUST",
+    "style": "",
+    "abv": "7%",
     "description": "DOUBLE DRY-HOPPED HAZY IPA W CITRA, KRUSH, NECTARON & MOTUEKA CRYO",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "SPECTRAL BLOOM",
+    "style": "Hazy Ipa",
+    "abv": "7%",
     "description": "HAZY IPA W CITRA, RIWAKA, STRATA & RAKAU",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Slice",
     "name": "TROPIC THUNDERSTRIKE",
+    "style": "Fruited Sour",
+    "abv": "7.6%",
     "description": "FRUITED SOUR W MANGO, PINEAPPLE & DRAGONFRUIT",
-    "abv": "7.6% ABV"
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "Vindicator West Coast IPA",
-    "description": "Hoppy, Citrus, Piney - 6.5% AlcVol"
+    "style": "Ipa",
+    "abv": "6.5%",
+    "description": "Hoppy, Citrus, Piney - 6.5% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "Alohawk Strong Ale",
-    "description": "Honey, Smooth, Malty - 8% AlcVol"
+    "style": "Ale",
+    "abv": "8%",
+    "description": "Honey, Smooth, Malty - 8% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "Tasty Waves West Coast IPA",
-    "description": "Centennial, Grapefruit, Citra - 6.6% AlcVol"
+    "style": "Ipa",
+    "abv": "6.6%",
+    "description": "Centennial, Grapefruit, Citra - 6.6% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "Allgood Hazy IPA",
-    "description": "Citrus, Tropical, Juicy - 7.5% AlcVol"
+    "style": "Hazy Ipa",
+    "abv": "7.5%",
+    "description": "Citrus, Tropical, Juicy - 7.5% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "Loomis Lite",
-    "description": "Crisp, Clear, Refreshing - 4% AlcVol"
+    "style": "",
+    "abv": "4%",
+    "description": "Crisp, Clear, Refreshing - 4% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "The Haka Hazy IPA",
-    "description": "New Zealand Hops, Stonefruit, Soft Body - 6.3% AlcVol"
+    "style": "Hazy Ipa",
+    "abv": "6.3%",
+    "description": "New Zealand Hops, Stonefruit, Soft Body - 6.3% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Loomis Basin",
     "name": "TacoCat Mexican Lager",
-    "description": "Golden, Soft, Toasty - 4.6% AlcVol"
+    "style": "Lager",
+    "abv": "4.6%",
+    "description": "Golden, Soft, Toasty - 4.6% AlcVol",
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Whitey's Rusty Spur Lager",
+    "style": "Lager",
+    "abv": "4.5%",
     "description": "Lager - American Light",
-    "abv": "4.5% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Gold Country Pilsner",
+    "style": "Pilsner",
+    "abv": "5%",
     "description": "Pilsner - Other",
-    "abv": "5% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Panic Rev 3",
+    "style": "Pilsner",
+    "abv": "5.6%",
     "description": "Pilsner - Other",
-    "abv": "5.6% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Oktoberfest",
+    "style": "Mrzen",
+    "abv": "5.2%",
     "description": "Mrzen",
-    "abv": "5.2% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Fool's Gold Ale",
+    "style": "Strong Ale",
+    "abv": "7.8%",
     "description": "Strong Ale - American",
-    "abv": "7.8% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "American River Pale Ale",
+    "style": "Pale Ale",
+    "abv": "5.6%",
     "description": "Pale Ale - American",
-    "abv": "5.6% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Gold Digger IPA",
+    "style": "Ipa",
+    "abv": "6.3%",
     "description": "IPA - American",
-    "abv": "6.3% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "My Friday Hazy IPA",
+    "style": "Ipa",
+    "abv": "6.5%",
     "description": "IPA - New England",
-    "abv": "6.5% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Kubaton",
+    "style": "Ipa",
+    "abv": "8%",
     "description": "IPA - Imperial",
-    "abv": "8% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Cross Rut 3",
+    "style": "Ipa",
+    "abv": "7.2%",
     "description": "IPA - American",
-    "abv": "7.2% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Milestone IPA",
+    "style": "Ipa",
+    "abv": "8%",
     "description": "IPA - Imperial",
-    "abv": "8% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "PU 240 Imperial IPA",
+    "style": "Ipa",
+    "abv": "8%",
     "description": "IPA - Imperial",
-    "abv": "8% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Grave Digger IPA",
+    "style": "Ipa",
+    "abv": "7.2%",
     "description": "IPA - Black",
-    "abv": "7.2% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Old Town Brown",
+    "style": "Brown Ale",
+    "abv": "3.8%",
     "description": "Brown Ale - English",
-    "abv": "3.8% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Shanghai Stout",
+    "style": "Stout",
+    "abv": "4.8%",
     "description": "Stout - Oatmeal",
-    "abv": "4.8% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Dr. Fords Old-Fashioned Miracle Elixir",
+    "style": "Porter",
+    "abv": "11%",
     "description": "Porter - Imperial",
-    "abv": "11% ABV"
+    "url": ""
   },
   {
     "brewery": "Auburn Alehouse",
     "name": "Kettle Sour",
+    "style": "Sour",
+    "abv": "4.1%",
     "description": "Sour - Other",
-    "abv": "4.1% ABV"
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Stein Deal",
-    "style": "Buy a Stein and fill it with your choice of Snappy the Lager, Liquid Schwarz, or Leather Drinkin' Shorts for 30",
-    "description": "Stein only 18"
+    "style": "Buy A Stein And Fill It With Your Choice Of Snappy The Lager, Liquid Schwarz, Or Leather Drinkin' Shorts For 30",
+    "abv": "N/A",
+    "description": "Stein only 18",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Snappy The Lager",
     "style": "Helles-Style Lager",
+    "abv": "5.2%",
     "description": "It's Clean, refreshing and...snappy",
-    "abv": "5.2% ABV"
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Que especial",
-    "style": "Mexican style lager",
-    "abv": "4.4% ABV"
+    "style": "Mexican Style Lager",
+    "abv": "4.4%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Summerthyme",
-    "style": "Kolsch w Lemon Thyme",
-    "abv": "5.2% ABV"
+    "style": "Kolsch W Lemon Thyme",
+    "abv": "5.2%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Leather Drinkin' Shorts",
     "style": "Festbier",
-    "abv": "5.8% ABV"
+    "abv": "5.8%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Breeze   Black Raspberry",
-    "style": "Hard Seltzer with black raspberry",
-    "abv": "5% ABV"
+    "style": "Hard Seltzer With Black Raspberry",
+    "abv": "5%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "On Ice",
-    "style": "Peach Tea inspired Hard Seltzer",
-    "abv": "5% ABV"
+    "style": "Peach Tea Inspired Hard Seltzer",
+    "abv": "5%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
-    "name": "Mangos in the Garden",
-    "style": "Imp. Sour with mango, coconut and vanilla beans",
-    "abv": "8% ABV"
+    "name": "Mangos in the Garden Slushie Available",
+    "style": "Imp. Sour With Mango, Coconut And Vanilla Beans",
+    "abv": "8%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Summer crush slushie available",
-    "style": "Sour ale w Raspberry, pomegranate, tangerine & lime",
-    "abv": "5.0% ABV"
+    "style": "Sour Ale W Raspberry, Pomegranate, Tangerine & Lime",
+    "abv": "5.0%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Will and Wonder Collab w Creature Comforts LA",
-    "style": "West Coast Pilsner w citra, peacharine, and mosaic cryo",
-    "abv": "5.5% ABV"
+    "style": "West Coast Pilsner W Citra, Peacharine, And Mosaic Cryo",
+    "abv": "5.5%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Liminal Traces",
-    "style": "Hazy IPA wcitra, nelson, motueka cryo, and galaxy",
-    "abv": "7% ABV"
+    "style": "Hazy Ipa Wcitra, Nelson, Motueka Cryo, And Galaxy",
+    "abv": "7%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Orbital drift",
-    "style": "Hazy ipa w elani, Nelson and mosaic",
-    "abv": "7% ABV"
+    "style": "Hazy Ipa W Elani, Nelson And Mosaic",
+    "abv": "7%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Dream Reader",
-    "style": "Hazy Ipa wCitra, Nelson & superdelic hops",
-    "abv": "7.2% ABV"
+    "style": "Hazy Ipa Wcitra, Nelson & Superdelic Hops",
+    "abv": "7.2%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Freshie Freeze",
-    "style": "Hazy IPA w Citra Cryofresh",
-    "abv": "6.8% ABV"
+    "style": "Hazy Ipa W Citra Cryofresh",
+    "abv": "6.8%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Perfect Time",
-    "style": "West Coast IPA",
+    "style": "West Coast Ipa",
+    "abv": "7%",
     "description": "Mosaic, Mosaic Cryo, Citra, nelson cryo, crush & strata hops",
-    "abv": "7% ABV"
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Hunt for October",
-    "style": "West Coast IPA W Citra, Simcoe, Idaho 7",
+    "style": "West Coast Ipa W Citra, Simcoe, Idaho 7",
+    "abv": "7.0%",
     "description": "Baseball's Fall classic at it's finest",
-    "abv": "7.0% ABV"
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Expedited",
-    "style": "Fresh hop West coast IPA wFresh Strata, Citra cryo, Centennial nuvo, Strata nuvo",
-    "abv": "6.8% ABV"
+    "style": "Fresh Hop West Coast Ipa Wfresh Strata, Citra Cryo, Centennial Nuvo, Strata Nuvo",
+    "abv": "6.8%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Scattered Glow",
-    "style": "Hazy Double IPA w Strata, Nelson",
-    "abv": "8.2% ABV"
+    "style": "Hazy Double Ipa W Strata, Nelson",
+    "abv": "8.2%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Flocculative Tendencies",
-    "style": "West Coast DIPA w citra and simcoe",
-    "abv": "8.2% ABV"
+    "style": "West Coast Dipa W Citra And Simcoe",
+    "abv": "8.2%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Full Duplex",
-    "style": "DDH west coast DIPA W Mosaic, Nelson, Citra  & strata  hops",
-    "abv": "8.5% ABV"
+    "style": "Ddh West Coast Dipa W Mosaic, Nelson, Citra  & Strata  Hops",
+    "abv": "8.5%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Nutterzzzzz",
-    "style": "imp pastry stout w coconut, peanuts, and vanilla bean",
-    "abv": "12.4% ABV"
+    "style": "Imp Pastry Stout W Coconut, Peanuts, And Vanilla Bean",
+    "abv": "12.4%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Moksa",
     "name": "Bean",
-    "style": "Blended Barrel aged imperial Stout WIndonesian Vanilla Beans, ugandan cacao & Guatemalan coffee",
-    "abv": "14.5% ABV"
+    "style": "Blended Barrel Aged Imperial Stout Windonesian Vanilla Beans, Ugandan Cacao & Guatemalan Coffee",
+    "abv": "14.5%",
+    "description": "",
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "1. Roast-It Note Nitro",
+    "style": "Milk Stout",
+    "abv": "5.9%",
     "description": "Milk Stout",
-    "abv": "5.9% ABV  NA IBU  Barebottle Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "2. Cicada Rhythm",
+    "style": "Dry Stout",
+    "abv": "6.5%",
     "description": "Dry Stout",
-    "abv": "6.5% ABV  NA IBU  Mindscape Fermentations"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "3. Coffee & Cigarettes",
+    "style": "Coffee Porter",
+    "abv": "7.7%",
     "description": "Coffee Porter",
-    "abv": "7.7% ABV  NA IBU  Cellarmaker Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "4. Speedway Stout",
-    "description": "Imperial Stout w Coffee",
-    "abv": "12% ABV  70 IBU  AleSmith Brewing Company"
+    "name": "4. Bacon & Eggs",
+    "style": "Imperial Coffee Porter",
+    "abv": "8%40%",
+    "description": "Imperial Coffee Porter",
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "5. meln",
+    "style": "Agua Fresca-Inspired Seltzer",
+    "abv": "5.2%",
     "description": "Agua Fresca-Inspired Seltzer w Cantaloupe & Lime",
-    "abv": "5.2% ABV  NA IBU  everywhere"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "6. Tropic Flame",
+    "style": "Fruit Sour",
+    "abv": "6.8%",
     "description": "Fruit Sour w Mango, Passion Fruit, Dragon Fruit & Yuzu",
-    "abv": "6.8% ABV  NA IBU  Burning Barrel Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "7. Each A Little Token",
+    "style": "Oak-Aged Grisette",
+    "abv": "5.2%",
     "description": "Oak-Aged Grisette w Nectarines",
-    "abv": "5.2% ABV  NA IBU  Sante Adairius Rustic Ales"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "8. Razzle Dazzle",
+    "style": "Hard Kombucha",
+    "abv": "5%",
     "description": "Hard Kombucha w Blackberry & Raspberry",
-    "abv": "5% ABV  NA IBU  Mindscape Fermentations"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "9. Mai Tai Black Label",
+    "style": "West Coast Triple Ipa",
+    "abv": "10.5%65%",
     "description": "West Coast Triple IPA w 100% Mosaic",
-    "abv": "10.5% ABV  65 IBU  Alvarado Street Brewery"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "10. nothing in the way",
+    "style": "Ddh West Coast Ipa",
+    "abv": "7%",
     "description": "DDH West Coast IPA w Citra, Krush, Krush Cryo, Nectaron, Nectaron Cryo, Riwaka & Riwaka Noble",
-    "abv": "7% ABV  NA IBU  everywhere"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "11. Smart Decisions",
+    "style": "Brown Ale",
+    "abv": "5.3%",
     "description": "Brown Ale",
-    "abv": "5.3% ABV  NA IBU  Urban Roots Brewing & Smokehouse"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "12. Blind Pig",
+    "style": "West Coast Ipa",
+    "abv": "6.2%70%",
     "description": "West Coast IPA",
-    "abv": "6.2% ABV  70 IBU  Russian River Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "13. Apotheosis",
+    "style": "West Coast Ipa",
+    "abv": "6.9%",
     "description": "West Coast IPA w Mosaic & Enigma",
-    "abv": "6.9% ABV  NA IBU  Ghost Town Brewing"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "14. Exquisite Vibrations",
+    "style": "Hazy Ipa",
+    "abv": "6.8%",
     "description": "Hazy IPA w Nelson & Waimea",
-    "abv": "6.8% ABV  NA IBU  Sante Adairius Rustic Ales"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "15. Gretchen",
+    "style": "Mrzen",
+    "abv": "4.7%",
     "description": "Mrzen",
-    "abv": "4.7% ABV  NA IBU  Sante Adairius Rustic Ales"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "16. where the sun rests",
+    "style": "Mexican Lager",
+    "abv": "4.5%",
     "description": "Mexican Lager",
-    "abv": "4.5% ABV  NA IBU  everywhere"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "17. The Brew Angels",
+    "style": "Hazy Ipa",
+    "abv": "7.1%34%",
     "description": "Hazy IPA w Nelson, Strata & El Dorado",
-    "abv": "7.1% ABV  34 IBU  Barebottle Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "18. thinking backwards",
+    "style": "West Coast Ipa",
+    "abv": "7.1%",
     "description": "West Coast IPA w Citra, Citra Dynaboost, Mosaic, Mosaic Cryo, Mosaic Dynaboost, Krush & Simcoe",
-    "abv": "7.1% ABV  NA IBU  everywhere"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "19. Mega Ripe",
+    "style": "Hazy Double Ipa",
+    "abv": "8.9%",
     "description": "Hazy Double IPA w Citra T-90, Citra Lupomax, Citra Spectrum, Citra Hyperboost & Citra CO2 Extract",
-    "abv": "8.9% ABV  NA IBU  Great Notion Brewing"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "20. Strata Squish",
+    "style": "Wet Hop West Coast Ipa",
+    "abv": "6.6%",
     "description": "Wet Hop West Coast IPA w 100% Strata",
-    "abv": "6.6% ABV  NA IBU  Original Pattern Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "21. Quite Right",
+    "style": "Hazy Ipa",
+    "abv": "6.7%",
     "description": "Hazy IPA w Citra & El Dorado",
-    "abv": "6.7% ABV  NA IBU  Original Pattern Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "22. Cherry Limeade",
+    "style": "Apple Cider",
+    "abv": "6.9%.%",
     "description": "Apple Cider w Cherries & Lime",
-    "abv": "6.9% ABV  NA IBU  BEND CIDER CO."
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "23. Psychic Burden",
+    "style": "Hazy Ipa",
+    "abv": "6%35%",
     "description": "Hazy IPA w Motueka, Citra & Simcoe Cryo",
-    "abv": "6% ABV  35 IBU  Flatland Brewing Company"
+    "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
     "name": "24. Biere Blanche",
+    "style": "Belgian Style White",
+    "abv": "4.7%",
     "description": "Belgian Style White",
-    "abv": "4.7% ABV  NA IBU  The Monks Cellar"
+    "url": ""
   }
 ]
