@@ -201,6 +201,14 @@
   },
   {
     "brewery": "Moonraker",
+    "name": "Yojo",
+    "style": "Ne Ipa",
+    "abv": "7%",
+    "description": "Hops Citra, Mosaic, Simcoe,  Galaxy",
+    "url": ""
+  },
+  {
+    "brewery": "Moonraker",
     "name": "The Holy Hermit",
     "style": "Ne Dipa",
     "abv": "8.5%",
