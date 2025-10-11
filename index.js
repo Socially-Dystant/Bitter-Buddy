@@ -261,19 +261,37 @@ async function chatWithModel(input) {
 
   console.log("🧠 chatWithModel input:", JSON.stringify(chatMessages, null, 2));
 
-  const completion = await client.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: systemPrompt },
-      ...chatMessages
-    ],
-  });
+// Stream the OpenAI response instead of waiting for full completion
+const stream = await client.chat.completions.stream({
+  model: "gpt-4o-mini",
+  temperature: 0.8,
+  messages: [
+    { role: "system", content: systemPrompt },
+    ...chatMessages
+  ],
+});
 
-  const reply = completion.choices?.[0]?.message?.content?.trim() || "";
-  return reply;
+// Collect the streamed output incrementally
+let reply = "";
+
+for await (const event of stream) {
+  if (event.type === "message") {
+    reply += event.message?.content?.map(c => c.text).join("") || "";
+  } else if (event.type === "message.delta") {
+    // Append incremental tokens as they arrive
+    reply += event.delta?.content?.map(c => c.text).join("") || "";
+  } else if (event.type === "error") {
+    console.error("❌ Stream error:", event.error);
+  }
 }
 
-const MAX_TURNS = 50; // last 50 user+assistant turns
+// Ensure clean trim before returning
+reply = reply.trim();
+
+return reply;
+
+
+const MAX_TURNS = 10; // last 50 user+assistant turns
 
 app.post("/chat", requireAuth, async (req, res) => {
   try {
@@ -326,4 +344,4 @@ app.post('/reset', requireAuth, (req, res) => {
 
 // ---------- start server ----------
 const port = process.env.PORT || 8787
-app.listen(port, () => console.log(`beerbot-edge listening on http://localhost:${port}`))
+app.listen(port, () => console.log(`beerbot-edge listening on http://localhost:${port}`))}
