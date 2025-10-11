@@ -124,43 +124,59 @@ async function chatWithModel(chatMessages) {
 
 // ---------- chat route (SSE streaming) ----------
 app.post("/chat", requireAuth, async (req, res) => {
-  res.setHeader("Content-Type", "text/event-stream")
-  res.setHeader("Cache-Control", "no-cache")
-  res.setHeader("Connection", "keep-alive")
-  res.flushHeaders()
-
   try {
-    const { messages } = req.body
+    const { messages } = req.body;
     if (!messages || !Array.isArray(messages)) {
-      res.write(`data: [ERROR] Invalid request\n\n`)
-      return res.end()
+      return res.status(400).json({ error: "Missing messages array" });
     }
 
-    const systemPrompt = SYSTEM_PROMPT()
-    const stream = await client.chat.completions.stream({
+    const systemPrompt = SYSTEM_PROMPT();
+
+    // If the client wants SSE streaming
+    if (req.headers.accept === "text/event-stream") {
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+      res.flushHeaders();
+
+      const stream = await client.chat.completions.stream({
+        model: "gpt-4o-mini",
+        temperature: 0.8,
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...messages
+        ],
+      });
+
+      for await (const event of stream) {
+        if (event.type === "message.delta") {
+          const chunk = event.delta?.content?.map(c => c.text).join("") || "";
+          if (chunk) res.write(`data: ${chunk}\n\n`);
+        }
+      }
+
+      res.write("data: [DONE]\n\n");
+      return res.end();
+    }
+
+    // --- Non-streaming mode (Android Retrofit clients) ---
+    const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       temperature: 0.8,
       messages: [
         { role: "system", content: systemPrompt },
         ...messages
       ],
-    })
+    });
 
-    for await (const event of stream) {
-      if (event.type === "message.delta") {
-        const chunk = event.delta?.content?.map(c => c.text).join("") || ""
-        if (chunk) res.write(`data: ${chunk}\n\n`)
-      }
-    }
-
-    res.write("data: [DONE]\n\n")
-    res.end()
+    const reply = completion.choices?.[0]?.message?.content?.trim() || "";
+    return res.json({ ok: true, reply });
   } catch (err) {
-    console.error("❌ Chat stream error:", err)
-    res.write(`data: [ERROR] ${err.message}\n\n`)
-    res.end()
+    console.error("❌ Chat error:", err);
+    return res.status(500).json({ error: err.message });
   }
-})
+});
+
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
