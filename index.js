@@ -299,23 +299,27 @@ app.post("/chat", requireAuth, async (req, res) => {
     }
 
     // 5) Non-streaming mode (e.g., Android Retrofit)
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      temperature: 0.8,
-      messages: [
-        { role: "system", content: combinedSystemPrompt },
-        ...userMessages
-      ],
-    });
+const basePrompt = SYSTEM_PROMPT(); // Bitter-Buddy core behavior
+const dynamicHint = messages.find(m => m.role === "system")?.content || "";
 
-    const reply = completion.choices?.[0]?.message?.content?.trim() || "";
-    return res.json({ ok: true, reply });
+const completion = await client.chat.completions.create({
+  model: "gpt-4o-mini",
+  temperature: 0.8,
+  messages: [
+    // Base behavior — tone, limits, style, etc.
+    { role: "system", content: basePrompt },
 
-  } catch (err) {
-    console.error("❌ Chat error:", err);
-    return res.status(500).json({ error: err?.message || "chat_failed" });
-  }
+    // Brewery-specific hint (taplist, traits, etc.)
+    ...(dynamicHint ? [{ role: "assistant", content: dynamicHint }] : []),
+
+    // Actual conversation (user + assistant history, minus system hint)
+    ...messages.filter(m => m.role !== "system")
+  ]
 });
+
+const reply = completion.choices?.[0]?.message?.content?.trim() || "";
+return res.json({ ok: true, reply });
+
 
 
 // ---------- history & reset ----------
