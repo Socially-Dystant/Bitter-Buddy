@@ -85,6 +85,57 @@ function requireAuth(req, res, next) {
   req.user = user
   next()
 }
+// ---------- AUTH ROUTES ----------
+app.post("/auth/register", (req, res) => {
+  try {
+    const { email, password } = req.body ?? {};
+    if (!email || !password)
+      return res.status(400).json({ error: "email_password_required" });
+
+    const exists = db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .get(email.toLowerCase());
+    if (exists) return res.status(409).json({ error: "email_in_use" });
+
+    const id = rid();
+    const password_hash = bcrypt.hashSync(password, 12);
+    db.prepare(
+      "INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)"
+    ).run(id, email.toLowerCase(), password_hash);
+
+    const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: "7d" });
+    res.json({ ok: true, user: { id, email }, token });
+  } catch (err) {
+    console.error("register error:", err);
+    res.status(500).json({ error: "register_failed" });
+  }
+});
+
+app.post("/auth/login", (req, res) => {
+  try {
+    const { email, password } = req.body ?? {};
+    const user = db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .get(email.toLowerCase());
+    if (!user) return res.status(401).json({ error: "invalid_credentials" });
+
+    const valid = bcrypt.compareSync(password, user.password_hash);
+    if (!valid) return res.status(401).json({ error: "invalid_credentials" });
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    res.json({ ok: true, user: { id: user.id, email: user.email }, token });
+  } catch (err) {
+    console.error("login error:", err);
+    res.status(500).json({ error: "login_failed" });
+  }
+});
+
+app.post("/auth/logout", (_req, res) => {
+  res.json({ ok: true });
+});
+
 
 // ---------- system prompt (fixed Spicy tone, 3-beer limit) ----------
 function SYSTEM_PROMPT() {
@@ -153,6 +204,66 @@ async function chatWithModel(chatMessages) {
   }
   return reply.trim()
 }
+// ---------- AUTH ROUTES ----------
+app.post("/auth/register", (req, res) => {
+  try {
+    const { email, password } = req.body ?? {};
+    if (!email || !password) {
+      return res.status(400).json({ error: "email_password_required" });
+    }
+
+    const exists = db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .get(email.toLowerCase());
+    if (exists) return res.status(409).json({ error: "email_in_use" });
+
+    const id = rid();
+    const password_hash = bcrypt.hashSync(password, 12);
+    db.prepare(
+      "INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)"
+    ).run(id, email.toLowerCase(), password_hash);
+
+    const token = jwt.sign({ id, email: email.toLowerCase() }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.json({ ok: true, user: { id, email: email.toLowerCase() }, token });
+  } catch (err) {
+    console.error("❌ register error:", err);
+    res.status(500).json({ error: "register_failed" });
+  }
+});
+
+app.post("/auth/login", (req, res) => {
+  try {
+    const { email, password } = req.body ?? {};
+    if (!email || !password) {
+      return res.status(400).json({ error: "email_password_required" });
+    }
+
+    const user = db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .get(email.toLowerCase());
+    if (!user) return res.status(401).json({ error: "invalid_credentials" });
+
+    const valid = bcrypt.compareSync(password, user.password_hash);
+    if (!valid) return res.status(401).json({ error: "invalid_credentials" });
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.json({ ok: true, user: { id: user.id, email: user.email }, token });
+  } catch (err) {
+    console.error("❌ login error:", err);
+    res.status(500).json({ error: "login_failed" });
+  }
+});
+
+app.post("/auth/logout", (_req, res) => {
+  res.json({ ok: true });
+});
+
 
 // ---------- chat route (SSE streaming) ----------
 app.post("/chat", requireAuth, async (req, res) => {
