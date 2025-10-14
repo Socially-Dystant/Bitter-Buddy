@@ -136,8 +136,7 @@ Formatting:
 async function chatWithModel(chatMessages) {
   const systemPrompt = SYSTEM_PROMPT()
   const stream = await client.chat.completions.stream({
-    model: "gpt-4o-mini",
-    temperature: 0.8,
+    model: "gpt-5-mini",
     messages: [
       { role: "system", content: systemPrompt },
       ...chatMessages
@@ -226,4 +225,8 @@ app.post('/reset', requireAuth, (req, res) => {
 
 // ---------- start server ----------
 const port = process.env.PORT || 8787
+// Serve a basic root route (for Render sanity check)
+app.get("/", (_req, res) => {
+  res.json({ ok: true, message: "Bitter Buddy backend is running 🍺" });
+});
 app.listen(port, () => console.log(`beerbot-edge running on port ${port}`))
