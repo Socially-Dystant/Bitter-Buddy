@@ -1198,5 +1198,125 @@
     "abv": "6.9%",
     "description": "",
     "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Hop On The Water",
+    "style": "Lemon Lime Seltzer",
+    "abv": "0.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Tijuana Weekend",
+    "style": "Mexican Lager",
+    "abv": "5.3%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Baja Bug",
+    "style": "Mango Sour",
+    "abv": "6.8%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "95630",
+    "style": "Pilsner",
+    "abv": "5.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Karmann Kolsch",
+    "style": "Kolsch",
+    "abv": "4.9%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Knock on Our Door",
+    "style": "Munich Dunkel",
+    "abv": "6.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "1300cc",
+    "style": "Extra Pale Ale",
+    "abv": "5.8%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Planet Caravan",
+    "style": "ESB/English Amber",
+    "abv": "5.3%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "BlumenVasen",
+    "style": "Oktoberfestbier",
+    "abv": "6.5%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Erik-E-Strata",
+    "style": "West Coast IPA",
+    "abv": "6.5%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Jetronic HAZE",
+    "style": "Hazy IPA",
+    "abv": "6.1%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Smash Test Dummy Hazy IPA",
+    "style": "Hazy IPA",
+    "abv": "6.1%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Slushee Bus",
+    "style": "Seltzer Slushes",
+    "abv": "6.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Fizzy Bus",
+    "style": "Vanilla Cream Hard Soda",
+    "abv": "6.3%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Apple Wagon",
+    "style": "Saltwatermelon Cider",
+    "abv": "6.9%",
+    "description": "",
+    "url": ""
   }
 ]
