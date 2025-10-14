@@ -268,33 +268,48 @@ app.post("/auth/logout", (_req, res) => {
 // ---------- chat route (SSE streaming) ----------
 app.post("/chat", requireAuth, async (req, res) => {
   try {
+    // 1) Validate input
     const { messages } = req.body;
-    if (!messages || !Array.isArray(messages)) {
+    if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: "Missing messages array" });
     }
 
-    const systemPrompt = SYSTEM_PROMPT();
+    // 2) Extract any system hint sent by the app and merge with server system prompt
+    const dynamicSystemHint =
+      messages.find(m => m?.role === "system" && typeof m.content === "string")?.content || "";
 
-    // If the client wants SSE streaming
-    if (req.headers.accept === "text/event-stream") {
+    const combinedSystemPrompt = [
+      SYSTEM_PROMPT(),
+      dynamicSystemHint.trim()
+    ].filter(Boolean).join("\n\n");
+
+    // 3) Remove system messages from the user-provided list (we already merged them)
+    const userMessages = messages.filter(m => m?.role !== "system");
+
+    // 4) If the client wants SSE streaming
+    if ((req.headers.accept || "").includes("text/event-stream")) {
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
-      res.flushHeaders();
+      res.flushHeaders?.();
 
       const stream = await client.chat.completions.stream({
         model: "gpt-4o-mini",
         temperature: 0.8,
         messages: [
-          { role: "system", content: systemPrompt },
-          ...messages
+          { role: "system", content: combinedSystemPrompt },
+          ...userMessages
         ],
       });
 
+      // Accumulate and stream out chunks
       for await (const event of stream) {
         if (event.type === "message.delta") {
-          const chunk = event.delta?.content?.map(c => c.text).join("") || "";
+          const chunk = (event.delta?.content?.map(c => c.text).join("") || "");
           if (chunk) res.write(`data: ${chunk}\n\n`);
+        } else if (event.type === "error") {
+          console.error("❌ Stream error:", event.error);
+          res.write(`data: [ERROR] ${String(event.error || "unknown")}\n\n`);
         }
       }
 
@@ -302,25 +317,22 @@ app.post("/chat", requireAuth, async (req, res) => {
       return res.end();
     }
 
-    // --- Non-streaming mode (Android Retrofit clients) ---
-const { messages } = req.body;
-const dynamicSystemHint = messages.find(m => m.role === "system")?.content || "";
-const systemPrompt = SYSTEM_PROMPT() + "\n\n" + dynamicSystemHint;
-
-const completion = await client.chat.completions.create({
-  model: "gpt-4o-mini",
-  temperature: 0.8,
-  messages: [
-    { role: "system", content: systemPrompt },
-    ...messages.filter(m => m.role !== "system") // drop the one we merged
-  ]
-});
+    // 5) Non-streaming mode (e.g., Android Retrofit)
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      temperature: 0.8,
+      messages: [
+        { role: "system", content: combinedSystemPrompt },
+        ...userMessages
+      ],
+    });
 
     const reply = completion.choices?.[0]?.message?.content?.trim() || "";
     return res.json({ ok: true, reply });
+
   } catch (err) {
     console.error("❌ Chat error:", err);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err?.message || "chat_failed" });
   }
 });
 
