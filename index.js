@@ -303,14 +303,18 @@ app.post("/chat", requireAuth, async (req, res) => {
     }
 
     // --- Non-streaming mode (Android Retrofit clients) ---
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      temperature: 0.8,
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...messages
-      ],
-    });
+const { messages } = req.body;
+const dynamicSystemHint = messages.find(m => m.role === "system")?.content || "";
+const systemPrompt = SYSTEM_PROMPT() + "\n\n" + dynamicSystemHint;
+
+const completion = await client.chat.completions.create({
+  model: "gpt-4o-mini",
+  temperature: 0.8,
+  messages: [
+    { role: "system", content: systemPrompt },
+    ...messages.filter(m => m.role !== "system") // drop the one we merged
+  ]
+});
 
     const reply = completion.choices?.[0]?.message?.content?.trim() || "";
     return res.json({ ok: true, reply });
