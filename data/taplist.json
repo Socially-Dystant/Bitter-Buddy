@@ -25,22 +25,6 @@
   },
   {
     "brewery": "Shred",
-    "name": "Micro Blaster",
-    "style": "Session Ipa",
-    "abv": "5%",
-    "description": "Blurring the lines of Session IPA and Pale Ale, this absolute hop crusher gets blasted with powerful charges of Nelson, Mosaic, and Simcoe. Punchy notes of blueberry forest, rock fruit, and southern hemi diesel.\r\n\r\n2025 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2024 World Beer Cup - Gold Medal - Session India Pale Ale\r\n\r\n2023 GABF - Bronze Medal - Session India Pale Ale",
-    "url": "https://shredbeercompany.com/menu/micro-blaster-session-ipa-5-abv/"
-  },
-  {
-    "brewery": "Shred",
-    "name": "Cosmic Swirl",
-    "style": "Hazy Ipa",
-    "abv": "7.2%",
-    "description": "Embark on a galactic journey with Cosmic Swirl, a bold and vibrant hazy IPA. Bursting with the interstellar flavors of Citra and Nectaron hops, this beer delivers a lush swirl of juicy citrus, tropical fruit, and cosmic haze. At 7.2% ABV, its a celestial experiencesoft, smooth, and packed with flavorperfect for when youre ready to get lost in the stars",
-    "url": "https://shredbeercompany.com/menu/cosmic-swirl-hazy-ipa-7-2-abv/"
-  },
-  {
-    "brewery": "Shred",
     "name": "Zero Degrees",
     "style": "Cold Ipa",
     "abv": "6.5%",
@@ -185,26 +169,18 @@
   },
   {
     "brewery": "Moonraker",
+    "name": "Juicy Slices",
+    "style": "Ne Pale",
+    "abv": "6%",
+    "description": "Hops Citra, Strata, Motueka",
+    "url": ""
+  },
+  {
+    "brewery": "Moonraker",
     "name": "Citrra",
     "style": "Ne Ipa",
     "abv": "7%",
     "description": "Hops Citra",
-    "url": ""
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Space Nectar",
-    "style": "Ne Ipa",
-    "abv": "7%",
-    "description": "Hops Classified",
-    "url": ""
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Yojo",
-    "style": "Ne Ipa",
-    "abv": "7%",
-    "description": "Hops Citra, Mosaic, Simcoe,  Galaxy",
     "url": ""
   },
   {
@@ -220,14 +196,6 @@
     "name": "Czechs the Boxes",
     "style": "Czech Lager",
     "abv": "4.5%",
-    "description": "Hops Czech Saaz",
-    "url": ""
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Boho Pils",
-    "style": "Czech Pilsner",
-    "abv": "5%",
     "description": "Hops Czech Saaz",
     "url": ""
   },
@@ -265,26 +233,10 @@
   },
   {
     "brewery": "Moonraker",
-    "name": "Festbier",
-    "style": "Oktoberfest Lager",
-    "abv": "6%",
-    "description": "Hops Mittlefruh, Sazz, Tettnanger",
-    "url": ""
-  },
-  {
-    "brewery": "Moonraker",
     "name": "Cans To Go",
     "style": "",
     "abv": "N/A",
     "description": "Don't see your favorite beer to go Ask about our growler options today.\nCans and Growlers are to go only, not for on-site consumption",
-    "url": ""
-  },
-  {
-    "brewery": "Moonraker",
-    "name": "Saison Julia",
-    "style": "Saison",
-    "abv": "6.7%",
-    "description": "Limited Release Aged in Wine Barrels for 2 Years",
     "url": ""
   },
   {
@@ -317,14 +269,6 @@
     "style": "",
     "abv": "6.8%",
     "description": "DOUBLE DRY-HOPPED WEST COAST IPA W NELSON, NELSON CRYO, CITRA, COLUMBUS CRYO & SIMCOE",
-    "url": ""
-  },
-  {
-    "brewery": "Slice",
-    "name": "SOUL RIPPER",
-    "style": "West Coast Ipa",
-    "abv": "6.9%",
-    "description": "WEST COAST IPA W MOSAIC, NECTARON & NZ CASCADE",
     "url": ""
   },
   {
@@ -609,7 +553,7 @@
   },
   {
     "brewery": "Moksa",
-    "name": "Snappy The Lager",
+    "name": "Snappy The Lager to go only for now",
     "style": "Helles-Style Lager",
     "abv": "5.2%",
     "description": "It's Clean, refreshing and...snappy",
@@ -841,10 +785,10 @@
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "9. Mai Tai Black Label",
-    "style": "West Coast Triple Ipa",
-    "abv": "10.5%65%",
-    "description": "West Coast Triple IPA w 100% Mosaic",
+    "name": "9. Pliny the Elder",
+    "style": "West Coast Double Ipa",
+    "abv": "8%100%",
+    "description": "West Coast Double IPA w Amarillo, Centennial, CTZ, Cascade, Warrior, & Simcoe",
     "url": ""
   },
   {
@@ -857,18 +801,18 @@
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "11. Smart Decisions",
-    "style": "Brown Ale",
-    "abv": "5.3%",
-    "description": "Brown Ale",
+    "name": "11. Shimmering Sky",
+    "style": "Golden Ale",
+    "abv": "5%10%",
+    "description": "Golden Ale",
     "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "12. Blind Pig",
-    "style": "West Coast Ipa",
-    "abv": "6.2%70%",
-    "description": "West Coast IPA",
+    "name": "12. Mountains of Mosaic",
+    "style": "Wet Hop West Coast Ipa",
+    "abv": "6.6%",
+    "description": "Wet Hop West Coast IPA w 100% Mosaic",
     "url": ""
   },
   {
@@ -897,10 +841,10 @@
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "16. where the sun rests",
-    "style": "Mexican Lager",
-    "abv": "4.5%",
-    "description": "Mexican Lager",
+    "name": "16. Lager Mich, Papa",
+    "style": "Helles Lager",
+    "abv": "5.6%",
+    "description": "Helles Lager",
     "url": ""
   },
   {
@@ -921,18 +865,18 @@
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "19. Mega Ripe",
-    "style": "Hazy Double Ipa",
-    "abv": "8.9%",
-    "description": "Hazy Double IPA w Citra T-90, Citra Lupomax, Citra Spectrum, Citra Hyperboost & Citra CO2 Extract",
+    "name": "19. Spectral Bloom",
+    "style": "Hazy Ipa",
+    "abv": "7%",
+    "description": "Hazy IPA w Citra, Rakau, Riwaka & Strata",
     "url": ""
   },
   {
     "brewery": "Old Town Pizza - Roseville",
-    "name": "20. Strata Squish",
-    "style": "Wet Hop West Coast Ipa",
-    "abv": "6.6%",
-    "description": "Wet Hop West Coast IPA w 100% Strata",
+    "name": "20. The West Is Yet To Come",
+    "style": "Ddh West Coast Ipa",
+    "abv": "7%",
+    "description": "DDH West Coast IPA w Mosaic, Riwaka, Riwaka Cryo & Columbus Cryo",
     "url": ""
   },
   {
@@ -1133,6 +1077,126 @@
     "style": "Dry Irish Stout",
     "abv": "5.3%",
     "description": "This dark stout done in the style of the world's most popular stout will not let you down. Rich in flaver yet dry and drinkable, It's our love letter to fans of dark, malty beers with notes of chocolate,  coffee and light roasted malt flavors. If you've got a thing for the dark side you'll love Dark Bent.",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Hop On The Water",
+    "style": "Lemon Lime Seltzer",
+    "abv": "0.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Tijuana Weekend",
+    "style": "Mexican Lager",
+    "abv": "5.3%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Baja Bug",
+    "style": "Mango Sour",
+    "abv": "6.8%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "95630",
+    "style": "Pilsner",
+    "abv": "5.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Karmann Kolsch",
+    "style": "Kolsch",
+    "abv": "4.9%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Knock on Our Door",
+    "style": "Munich Dunkel",
+    "abv": "6.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "1300cc",
+    "style": "Extra Pale Ale",
+    "abv": "5.8%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Planet Caravan",
+    "style": "Esbenglish Amber",
+    "abv": "5.3%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "BlumenVasen",
+    "style": "Oktoberfestbier",
+    "abv": "6.5%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Erik-E-Strata",
+    "style": "West Coast Ipa",
+    "abv": "6.5%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Jetronic HAZE",
+    "style": "Hazy Ipa",
+    "abv": "6.1%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Smash Test Dummy\tHazy IPA",
+    "style": "",
+    "abv": "6.1%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Slushee Bus",
+    "style": "Seltzer Slushes",
+    "abv": "6.0%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Fizzy Bus",
+    "style": "Out\t\tVancream Hard Soda",
+    "abv": "6.3%",
+    "description": "",
+    "url": ""
+  },
+  {
+    "brewery": "Red Bus Brewing",
+    "name": "Apple Wagon",
+    "style": "Saltwatermelon Cider",
+    "abv": "6.9%",
+    "description": "",
     "url": ""
   }
 ]
