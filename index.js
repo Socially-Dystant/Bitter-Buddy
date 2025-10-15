@@ -247,24 +247,36 @@ app.post('/chat', requireAuth, async (req, res) => {
       return res.end()
     }
 
-    // 5) Non-streaming mode (Android Retrofit)
-    const basePrompt = SYSTEM_PROMPT() // core behavior
-    const dynamicHint = dynamicSystemHint // already pulled from messages
+   // 5) Non-streaming mode (Android Retrofit)
+const basePrompt = SYSTEM_PROMPT(); // Bitter-Buddy core behavior
+const dynamicHint =
+  messages.find(m => m.role === 'system')?.content?.trim() || '';
 
-    const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
-      temperature: 0.8,
-      messages: [
-        // Base behavior — tone, limits, style, etc.
-        { role: 'system', content: basePrompt },
+const completion = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  temperature: 0.7,
+  messages: [
+    // Behavior rules
+    { role: 'system', content: basePrompt },
 
-        // Brewery/taplist/traits hint from the app (if provided)
-        ...(dynamicHint ? [{ role: 'assistant', content: dynamicHint }] : []),
+    // Present factual taplist context as a *user message*, not assistant/system
+    ...(dynamicHint
+      ? [
+          {
+            role: 'user',
+            content: `### TAPLIST CONTEXT\n${dynamicHint}\n\nOnly reference the beers shown above. Do NOT invent new ones.`,
+          },
+        ]
+      : []),
 
-        // Actual conversation (user + assistant history, minus the system hint we merged)
-        ...userMessages
-      ]
-    })
+    // Actual conversation
+    ...messages.filter(m => m.role !== 'system'),
+  ],
+});
+
+const reply = completion.choices?.[0]?.message?.content?.trim() || '';
+return res.json({ ok: true, reply });
+
 
     const reply = completion.choices?.[0]?.message?.content?.trim() || ''
     return res.json({ ok: true, reply })
