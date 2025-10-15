@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename)
 // ---------- express app ----------
 const app = express()
 app.use(cors({ origin: true, credentials: true }))
-app.use(express.json())
+app.use(express.json({ limit: '512kb' })) // keep modest to avoid 413s
 app.use(cookieParser(process.env.AUTH_SECRET))
 
 app.use((req, _res, next) => { console.log(`${req.method} ${req.url}`); next() })
@@ -37,7 +37,7 @@ db.pragma('journal_mode = WAL')
 
 // ---------- helpers ----------
 const rid = (n = 16) => crypto.randomBytes(n).toString('hex')
-const JWT_SECRET = process.env.JWT_SECRET || "super-secret-fallback"
+const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-fallback'
 
 // ---------- table creation ----------
 db.exec(`
@@ -61,23 +61,24 @@ CREATE TABLE IF NOT EXISTS messages (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `)
-
-try { db.exec(`ALTER TABLE messages ADD COLUMN user_id TEXT`); } catch {}
+try { db.exec(`ALTER TABLE messages ADD COLUMN user_id TEXT`); } catch {/* already added */}
 
 // ---------- auth helpers ----------
 function requireAuth(req, res, next) {
+  // Bearer token first (Android)
   const authHeader = req.headers.authorization
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    const token = authHeader.split(" ")[1]
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1]
     try {
       const decoded = jwt.verify(token, JWT_SECRET)
       req.user = { id: decoded.id, email: decoded.email }
       return next()
     } catch {
-      return res.status(401).json({ error: "invalid_token" })
+      return res.status(401).json({ error: 'invalid_token' })
     }
   }
 
+  // Cookie fallback (web)
   const uid = req.signedCookies?.uid
   if (!uid) return res.status(401).json({ error: 'unauthenticated' })
   const user = db.prepare(`SELECT * FROM users WHERE id = ?`).get(uid)
@@ -85,65 +86,14 @@ function requireAuth(req, res, next) {
   req.user = user
   next()
 }
-// ---------- AUTH ROUTES ----------
-app.post("/auth/register", (req, res) => {
-  try {
-    const { email, password } = req.body ?? {};
-    if (!email || !password)
-      return res.status(400).json({ error: "email_password_required" });
-
-    const exists = db
-      .prepare("SELECT * FROM users WHERE email = ?")
-      .get(email.toLowerCase());
-    if (exists) return res.status(409).json({ error: "email_in_use" });
-
-    const id = rid();
-    const password_hash = bcrypt.hashSync(password, 12);
-    db.prepare(
-      "INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)"
-    ).run(id, email.toLowerCase(), password_hash);
-
-    const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: "7d" });
-    res.json({ ok: true, user: { id, email }, token });
-  } catch (err) {
-    console.error("register error:", err);
-    res.status(500).json({ error: "register_failed" });
-  }
-});
-
-app.post("/auth/login", (req, res) => {
-  try {
-    const { email, password } = req.body ?? {};
-    const user = db
-      .prepare("SELECT * FROM users WHERE email = ?")
-      .get(email.toLowerCase());
-    if (!user) return res.status(401).json({ error: "invalid_credentials" });
-
-    const valid = bcrypt.compareSync(password, user.password_hash);
-    if (!valid) return res.status(401).json({ error: "invalid_credentials" });
-
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
-    res.json({ ok: true, user: { id: user.id, email: user.email }, token });
-  } catch (err) {
-    console.error("login error:", err);
-    res.status(500).json({ error: "login_failed" });
-  }
-});
-
-app.post("/auth/logout", (_req, res) => {
-  res.json({ ok: true });
-});
-
 
 // ---------- system prompt (fixed Spicy tone, 3-beer limit) ----------
 function SYSTEM_PROMPT() {
   return `
 Prompt Name: Bitter-Buddy
 
-You are "Beer Bot" — a blunt, witty cicerone with a dry Steven Wright-style humor. 
-You live in Auburn, CA, love West Coast Double IPAs, and have little patience for stupidity. 
+You are "Beer Bot" — a blunt, witty cicerone with a dry Steven Wright-style humor.
+You live in Auburn, CA, love West Coast Double IPAs, and have little patience for stupidity.
 You’re sarcastic but good-natured. Never use slurs, threats, or jokes about protected traits.
 
 Behavior:
@@ -158,169 +108,171 @@ Behavior:
 Formatting:
 - No bullets unless asked.
 - One tight paragraph unless showing a taplist (then bullets are okay).
-`.trim();
+`.trim()
 }
 
+// ---------- AUTH ROUTES ----------
+app.post('/auth/register', (req, res) => {
+  try {
+    const { email, password } = req.body ?? {}
+    if (!email || !password) {
+      return res.status(400).json({ error: 'email_password_required' })
+    }
 
+    const exists = db.prepare('SELECT * FROM users WHERE email = ?').get(String(email).toLowerCase())
+    if (exists) return res.status(409).json({ error: 'email_in_use' })
 
+    const id = rid()
+    const password_hash = bcrypt.hashSync(String(password), 12)
 
-// ---------- OpenAI chat handler ----------
+    db.prepare('INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)')
+      .run(id, String(email).toLowerCase(), password_hash)
+
+    // optional cookie; Android uses Bearer token
+    res.cookie?.('uid', id, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      signed: !!process.env.AUTH_SECRET,
+      maxAge: 1000 * 60 * 60 * 24 * 30
+    })
+
+    const token = jwt.sign({ id, email: String(email).toLowerCase() }, JWT_SECRET, { expiresIn: '7d' })
+    res.json({ ok: true, user: { id, email: String(email).toLowerCase() }, token })
+  } catch (err) {
+    console.error('register error:', err)
+    res.status(500).json({ error: 'register_failed' })
+  }
+})
+
+app.post('/auth/login', (req, res) => {
+  try {
+    const { email, password } = req.body ?? {}
+    if (!email || !password) {
+      return res.status(400).json({ error: 'email_password_required' })
+    }
+
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(String(email).toLowerCase())
+    if (!user) return res.status(401).json({ error: 'invalid_credentials' })
+
+    const valid = bcrypt.compareSync(String(password), user.password_hash)
+    if (!valid) return res.status(401).json({ error: 'invalid_credentials' })
+
+    // optional cookie; Android uses Bearer token
+    res.cookie?.('uid', user.id, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      signed: !!process.env.AUTH_SECRET,
+      maxAge: 1000 * 60 * 60 * 24 * 30
+    })
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' })
+    res.json({ ok: true, user: { id: user.id, email: user.email }, token })
+  } catch (err) {
+    console.error('login error:', err)
+    res.status(500).json({ error: 'login_failed' })
+  }
+})
+
+app.post('/auth/logout', (_req, res) => {
+  res.clearCookie?.('uid')
+  res.json({ ok: true })
+})
+
+// ---------- OpenAI (optional helper if you want to call it elsewhere) ----------
 async function chatWithModel(chatMessages) {
   const systemPrompt = SYSTEM_PROMPT()
   const stream = await client.chat.completions.stream({
-    model: "gpt-5-mini",
-    messages: [
-      { role: "system", content: systemPrompt },
-      ...chatMessages
-    ]
+    model: 'gpt-4o-mini',
+    temperature: 0.8,
+    messages: [{ role: 'system', content: systemPrompt }, ...chatMessages]
   })
 
-  let reply = ""
+  let reply = ''
   for await (const event of stream) {
-    if (event.type === "message.delta") {
-      reply += event.delta?.content?.map(c => c.text).join("") || ""
-    } else if (event.type === "error") {
-      console.error("❌ Stream error:", event.error)
+    if (event.type === 'message.delta') {
+      reply += event.delta?.content?.map(c => c.text).join('') || ''
+    } else if (event.type === 'error') {
+      console.error('❌ Stream error:', event.error)
     }
   }
   return reply.trim()
 }
-// ---------- AUTH ROUTES ----------
-app.post("/auth/register", (req, res) => {
-  try {
-    const { email, password } = req.body ?? {};
-    if (!email || !password) {
-      return res.status(400).json({ error: "email_password_required" });
-    }
 
-    const exists = db
-      .prepare("SELECT * FROM users WHERE email = ?")
-      .get(email.toLowerCase());
-    if (exists) return res.status(409).json({ error: "email_in_use" });
-
-    const id = rid();
-    const password_hash = bcrypt.hashSync(password, 12);
-    db.prepare(
-      "INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)"
-    ).run(id, email.toLowerCase(), password_hash);
-
-    const token = jwt.sign({ id, email: email.toLowerCase() }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
-
-    res.json({ ok: true, user: { id, email: email.toLowerCase() }, token });
-  } catch (err) {
-    console.error("❌ register error:", err);
-    res.status(500).json({ error: "register_failed" });
-  }
-});
-
-app.post("/auth/login", (req, res) => {
-  try {
-    const { email, password } = req.body ?? {};
-    if (!email || !password) {
-      return res.status(400).json({ error: "email_password_required" });
-    }
-
-    const user = db
-      .prepare("SELECT * FROM users WHERE email = ?")
-      .get(email.toLowerCase());
-    if (!user) return res.status(401).json({ error: "invalid_credentials" });
-
-    const valid = bcrypt.compareSync(password, user.password_hash);
-    if (!valid) return res.status(401).json({ error: "invalid_credentials" });
-
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
-
-    res.json({ ok: true, user: { id: user.id, email: user.email }, token });
-  } catch (err) {
-    console.error("❌ login error:", err);
-    res.status(500).json({ error: "login_failed" });
-  }
-});
-
-app.post("/auth/logout", (_req, res) => {
-  res.json({ ok: true });
-});
-
-
-// ---------- chat route (SSE streaming) ----------
-app.post("/chat", requireAuth, async (req, res) => {
+// ---------- chat route (SSE + non-streaming) ----------
+app.post('/chat', requireAuth, async (req, res) => {
   try {
     // 1) Validate input
-    const { messages } = req.body;
+    const { messages } = req.body
     if (!Array.isArray(messages) || messages.length === 0) {
-      return res.status(400).json({ error: "Missing messages array" });
+      return res.status(400).json({ error: 'Missing messages array' })
     }
 
-    // 2) Extract any system hint sent by the app and merge with server system prompt
+    // 2) Merge system hint (from app) with base prompt
     const dynamicSystemHint =
-      messages.find(m => m?.role === "system" && typeof m.content === "string")?.content || "";
+      messages.find(m => m?.role === 'system' && typeof m.content === 'string')?.content || ''
 
-    const combinedSystemPrompt = [
-      SYSTEM_PROMPT(),
-      dynamicSystemHint.trim()
-    ].filter(Boolean).join("\n\n");
+    const combinedSystemPrompt = [SYSTEM_PROMPT(), dynamicSystemHint.trim()]
+      .filter(Boolean)
+      .join('\n\n')
 
-    // 3) Remove system messages from the user-provided list (we already merged them)
-    const userMessages = messages.filter(m => m?.role !== "system");
+    // 3) Remove system messages (already merged)
+    const userMessages = messages.filter(m => m?.role !== 'system')
 
-    // 4) If the client wants SSE streaming
-    if ((req.headers.accept || "").includes("text/event-stream")) {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
-      res.flushHeaders?.();
+    // 4) SSE streaming mode
+    if ((req.headers.accept || '').includes('text/event-stream')) {
+      res.setHeader('Content-Type', 'text/event-stream')
+      res.setHeader('Cache-Control', 'no-cache')
+      res.setHeader('Connection', 'keep-alive')
+      res.flushHeaders?.()
 
       const stream = await client.chat.completions.stream({
-        model: "gpt-4o-mini",
+        model: 'gpt-4o-mini',
         temperature: 0.8,
-        messages: [
-          { role: "system", content: combinedSystemPrompt },
-          ...userMessages
-        ],
-      });
+        messages: [{ role: 'system', content: combinedSystemPrompt }, ...userMessages]
+      })
 
-      // Accumulate and stream out chunks
       for await (const event of stream) {
-        if (event.type === "message.delta") {
-          const chunk = (event.delta?.content?.map(c => c.text).join("") || "");
-          if (chunk) res.write(`data: ${chunk}\n\n`);
-        } else if (event.type === "error") {
-          console.error("❌ Stream error:", event.error);
-          res.write(`data: [ERROR] ${String(event.error || "unknown")}\n\n`);
+        if (event.type === 'message.delta') {
+          const chunk = event.delta?.content?.map(c => c.text).join('') || ''
+          if (chunk) res.write(`data: ${chunk}\n\n`)
+        } else if (event.type === 'error') {
+          console.error('❌ Stream error:', event.error)
+          res.write(`data: [ERROR] ${String(event.error || 'unknown')}\n\n`)
         }
       }
 
-      res.write("data: [DONE]\n\n");
-      return res.end();
+      res.write('data: [DONE]\n\n')
+      return res.end()
     }
 
-    // 5) Non-streaming mode (e.g., Android Retrofit)
-const basePrompt = SYSTEM_PROMPT(); // Bitter-Buddy core behavior
-const dynamicHint = messages.find(m => m.role === "system")?.content || "";
+    // 5) Non-streaming mode (Android Retrofit)
+    const basePrompt = SYSTEM_PROMPT() // core behavior
+    const dynamicHint = dynamicSystemHint // already pulled from messages
 
-const completion = await client.chat.completions.create({
-  model: "gpt-4o-mini",
-  temperature: 0.8,
-  messages: [
-    // Base behavior — tone, limits, style, etc.
-    { role: "system", content: basePrompt },
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      temperature: 0.8,
+      messages: [
+        // Base behavior — tone, limits, style, etc.
+        { role: 'system', content: basePrompt },
 
-    // Brewery-specific hint (taplist, traits, etc.)
-    ...(dynamicHint ? [{ role: "assistant", content: dynamicHint }] : []),
+        // Brewery/taplist/traits hint from the app (if provided)
+        ...(dynamicHint ? [{ role: 'assistant', content: dynamicHint }] : []),
 
-    // Actual conversation (user + assistant history, minus system hint)
-    ...messages.filter(m => m.role !== "system")
-  ]
-});
+        // Actual conversation (user + assistant history, minus the system hint we merged)
+        ...userMessages
+      ]
+    })
 
-const reply = completion.choices?.[0]?.message?.content?.trim() || "";
-return res.json({ ok: true, reply });
-
-
+    const reply = completion.choices?.[0]?.message?.content?.trim() || ''
+    return res.json({ ok: true, reply })
+  } catch (err) {
+    console.error('❌ Chat error:', err)
+    return res.status(500).json({ error: err?.message || 'chat_failed' })
+  }
+})
 
 // ---------- history & reset ----------
 app.get('/history', requireAuth, (req, res) => {
@@ -335,10 +287,12 @@ app.post('/reset', requireAuth, (req, res) => {
   res.json({ ok: true })
 })
 
+// ---------- health & root ----------
+app.get('/health', (_req, res) => res.json({ ok: true }))
+app.get('/', (_req, res) => {
+  res.json({ ok: true, message: 'Bitter Buddy backend is running 🍺' })
+})
+
 // ---------- start server ----------
 const port = process.env.PORT || 8787
-// Serve a basic root route (for Render sanity check)
-app.get("/", (_req, res) => {
-  res.json({ ok: true, message: "Bitter Buddy backend is running 🍺" });
-});
 app.listen(port, () => console.log(`beerbot-edge running on port ${port}`))
