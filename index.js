@@ -297,11 +297,8 @@ app.post('/reset', requireAuth, (req, res) => {
   res.json({ ok: true })
 })
 
-// ---------- health & root ----------
+// ---------- health ----------
 app.get('/health', (_req, res) => res.json({ ok: true }))
-app.get('/', (_req, res) => {
-  res.json({ ok: true, message: 'Bitter Buddy backend is running 🍺' })
-})
 
 // ---------- start server ----------
 const port = process.env.PORT || 8787
