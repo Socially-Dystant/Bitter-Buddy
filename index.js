@@ -12,6 +12,7 @@ import bcrypt from 'bcryptjs'
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
 
+
 // ---------- setup paths ----------
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -276,10 +277,6 @@ const completion = await client.chat.completions.create({
 
 const reply = completion.choices?.[0]?.message?.content?.trim() || '';
 return res.json({ ok: true, reply });
-
-
-    const reply = completion.choices?.[0]?.message?.content?.trim() || ''
-    return res.json({ ok: true, reply })
   } catch (err) {
     console.error('❌ Chat error:', err)
     return res.status(500).json({ error: err?.message || 'chat_failed' })
