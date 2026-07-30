@@ -22,6 +22,7 @@ const app = express()
 app.use(cors({ origin: true, credentials: true }))
 app.use(express.json({ limit: '512kb' })) // keep modest to avoid 413s
 app.use(cookieParser(process.env.AUTH_SECRET))
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use((req, _res, next) => { console.log(`${req.method} ${req.url}`); next() })
 process.on('unhandledRejection', (e) => console.error('unhandledRejection', e))
